@@ -1,4 +1,5 @@
 import Vue from 'vue'
+// localStorage的设置与默认值
 import VueStorage from 'vue-ls'
 import config from '@/config/defaultSettings'
 

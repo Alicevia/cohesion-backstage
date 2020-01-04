@@ -1,7 +1,8 @@
 <template>
   <a-layout-sider
+  style="backgroundColor:#354052"
     :class="['sider', isDesktop() ? null : 'shadow', theme, fixSiderbar ? 'ant-fixed-sidemenu' : null ]"
-    width="256px"
+    width="210px"
     :collapsible="collapsible"
     v-model="collapsed"
     :trigger="null">

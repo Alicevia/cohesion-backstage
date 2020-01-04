@@ -1,16 +1,17 @@
 <template>
   <transition name="showHeader">
-    <div v-if="visible" class="header-animat">
+    <div v-if="visible" class="header-animat" >
       <a-layout-header
         v-if="visible"
         :class="[fixedHeader && 'ant-header-fixedHeader', sidebarOpened ? 'ant-header-side-opened' : 'ant-header-side-closed', ]"
-        :style="{ padding: '0' }">
-        <div v-if="mode === 'sidemenu'" class="header">
-          <a-icon v-if="device==='mobile'" class="trigger" :type="collapsed ? 'menu-fold' : 'menu-unfold'" @click="toggle"/>
+        :style="{ padding: '0',height:'110px'}">
+        <div v-if="mode === 'sidemenu'" class="header" style="height:110px;lineHeight:110px;backgroundColor:#354052" >
+          <a-icon  v-if="device==='mobile'" class="trigger" :type="collapsed ? 'menu-fold' : 'menu-unfold'" @click="toggle"/>
           <a-icon v-else class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggle"/>
-          <user-menu></user-menu>
+          <!-- <user-menu></user-menu> -->
+          <HeaderList></HeaderList>
         </div>
-        <div v-else :class="['top-nav-header-index', theme]">
+        <!-- <div v-else :class="['top-nav-header-index', theme]">
           <div class="header-index-wide">
             <div class="header-index-left">
               <logo class="top-nav-header" :show-title="device !== 'mobile'"/>
@@ -19,7 +20,7 @@
             </div>
             <user-menu class="header-index-right"></user-menu>
           </div>
-        </div>
+        </div> -->
       </a-layout-header>
     </div>
   </transition>
@@ -30,7 +31,7 @@ import UserMenu from '../tools/UserMenu'
 import SMenu from '../Menu/'
 import Logo from '../tools/Logo'
 import { mixin } from '@/utils/mixin'
-
+import HeaderList from '../tools/HeaderList'
 export default {
   name: 'GlobalHeader',
   components: {
@@ -102,6 +103,9 @@ export default {
   },
   beforeDestroy () {
     document.body.removeEventListener('scroll', this.handleScroll, true)
+  },
+  components:{
+    HeaderList
   }
 }
 </script>
@@ -111,6 +115,7 @@ export default {
 
 .header-animat{
   position: relative;
+  height: 110px !important;
   z-index: @ant-global-header-zindex;
 }
 .showHeader-enter-active {

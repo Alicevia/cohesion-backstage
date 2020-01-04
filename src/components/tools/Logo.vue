@@ -1,8 +1,8 @@
 <template>
-  <div class="logo">
-    <router-link :to="{name:'dashboard'}">
+  <div class="logo" style="height:110px;lineHeight:110px;backgroundColor:#354052">
+    <router-link :to="{name:'index'}">
       <LogoSvg alt="logo" />
-      <h1 v-if="showTitle">{{ title }}</h1>
+      <h1 v-if="showTitle" >{{ title }}</h1>
     </router-link>
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'Ant Design Pro',
+      default: '凝聚通讯',
       required: false
     },
     showTitle: {

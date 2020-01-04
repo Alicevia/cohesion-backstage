@@ -18,7 +18,7 @@
         @menuSelect="menuSelect"
       ></side-menu>
     </a-drawer>
-
+  
     <side-menu
       v-else-if="isSideMenu()"
       mode="inline"
@@ -48,9 +48,9 @@
       </a-layout-content>
 
       <!-- layout footer -->
-      <a-layout-footer>
+      <!-- <a-layout-footer>
         <global-footer />
-      </a-layout-footer>
+      </a-layout-footer> -->
 
       <!-- Setting Drawer (show in development mode) -->
       <setting-drawer v-if="!production"></setting-drawer>
@@ -71,6 +71,8 @@ import GlobalHeader from '@/components/GlobalHeader'
 import GlobalFooter from '@/components/GlobalFooter'
 import SettingDrawer from '@/components/SettingDrawer'
 
+import { asyncRouterMap } from '@/config/router.config.js'//新增用于自己控制路由
+
 export default {
   name: 'BasicLayout',
   mixins: [mixin, mixinDevice],
@@ -90,7 +92,7 @@ export default {
   },
   computed: {
     ...mapState({
-      // 动态主路由
+      // 动态主路由 addRouters里面是动态生成的路由 通过发请求之类
       mainMenu: state => state.permission.addRouters
     }),
     contentPaddingLeft () {
@@ -109,7 +111,9 @@ export default {
     }
   },
   created () {
-    this.menus = this.mainMenu.find(item => item.path === '/').children
+      this.menus = asyncRouterMap.find((item) => item.path === '/').children//用于自己控制路由
+    //this.menus = this.mainMenu.find(item => item.path === '/').children
+    console.log(this.menus)
     this.collapsed = !this.sidebarOpened
   },
   mounted () {
