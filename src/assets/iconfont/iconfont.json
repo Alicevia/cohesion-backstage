@@ -1,0 +1,93 @@
+{
+  "id": "1594994",
+  "name": "PC",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1115773",
+      "name": "分享",
+      "font_class": "fenxiang",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "1576548",
+      "name": "账户",
+      "font_class": "zhanghu",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "1973949",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "2088194",
+      "name": "监控",
+      "font_class": "jiankong",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "2454406",
+      "name": "返回",
+      "font_class": "fanhui1",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "2976407",
+      "name": "报表",
+      "font_class": "baobiao",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "5564389",
+      "name": "数据",
+      "font_class": "shuju",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "5964630",
+      "name": "日志",
+      "font_class": "rizhi",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "7708180",
+      "name": "首页-选中",
+      "font_class": "yemian-copy-copy",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "9157830",
+      "name": "删 除",
+      "font_class": "shanchu",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "9221341",
+      "name": "管理",
+      "font_class": "guanli",
+      "unicode": "e780",
+      "unicode_decimal": 59264
+    },
+    {
+      "icon_id": "9444997",
+      "name": "退出",
+      "font_class": "tuichu",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    }
+  ]
+}

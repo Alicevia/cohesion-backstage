@@ -23,6 +23,7 @@ export default {
 }
 </script>
 <style>
+  @import '~@/assets/iconfont/iconfont.css';
   #app {
     height: 100%;
   }

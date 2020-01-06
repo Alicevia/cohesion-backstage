@@ -332,7 +332,11 @@ import { bxAnaalyse } from '@/core/icons'
 
 export const asyncRouterMap = [
   {
-    path: '/',
+    path:'/',
+    redirect:'/index'
+  },
+  {
+    path: '/index',
     name: 'index',
     component: BasicLayout,
     meta: { title: '首页' },
@@ -352,6 +356,149 @@ export const asyncRouterMap = [
       },
     ]
   },
+  {
+    path: '/account',
+    name: 'account',
+    component: BasicLayout,
+    meta: { title: '账户信息' },
+    redirect: '/account/info',
+    children: [
+      {
+        path: '/account/info',
+        name: 'accountinfo',
+        component: RouteView,
+        meta: { title: '个人信息', keepAlive: true, icon: 'user' },
+      },
+      // {
+      //   path: '/index/project',
+      //   name: 'project',
+      //   component: RouteView,
+      //   meta: { title: '项目列表', keepAlive: true, icon: 'bars'},
+      // },
+    ]
+  },
+  {
+    path: '/monitor',
+    name: 'monitor',
+    component: BasicLayout,
+    meta: { title: '监控' },
+    redirect: '/monitor/data',
+    children: [
+      {
+        path: '/monitor/data',
+        name: 'monitordata',
+        component: RouteView,
+        meta: { title: '数据监控', keepAlive: true, icon: 'bar-chart' },
+      },
+      {
+        path: '/monitor/map',
+        name: 'monitormap',
+        component: RouteView,
+        meta: { title: '场景地图', keepAlive: true, icon: 'heat-map' },
+      },
+      {
+        path: '/monitor/simulation',
+        name: 'monitorsimulation',
+        component: RouteView,
+        meta: { title: '模拟场景', keepAlive: true, icon: 'retweet'},
+      },
+      {
+        path: '/monitor/screen',
+        name: 'monitorscreen',
+        component: RouteView,
+        meta: { title: '数据大屏', keepAlive: true, icon: 'desktop'},
+      },
+    ]
+  },
+  {
+    path: '/manage',
+    name: 'manage',
+    component: BasicLayout,
+    meta: { title: '管理' },
+    redirect: '/manage/group',
+    children:[
+      {
+        path:'/manage/group',
+        name: 'managegroup',
+        component: RouteView,
+        meta: { title: '分组管理', keepAlive: true, icon: 'cluster'},
+      },
+      {
+        path:'/manage/device',
+        name: 'managedevice',
+        component: RouteView,
+        meta: { title: '设备管理', keepAlive: true, icon: 'printer'},
+      },
+      {
+        path:'/manage/simulation',
+        name: 'managesimulation',
+        component: RouteView,
+        meta: { title: '模拟场景', keepAlive: true, icon: 'retweet'},
+      },
+      {
+        path:'/manage/screen',
+        name: 'managescreen',
+        component: RouteView,
+        meta: { title: '数据大屏', keepAlive: true, icon: 'desktop'},
+      },
+
+    ]
+  },
+  {
+    path: '/log',
+    name: 'log',
+    component: BasicLayout,
+    meta: { title: '日志' },
+    redirect: '/log/record',
+    children:[
+      {
+        path:'/log/record',
+        name: 'logrecord',
+        component: RouteView,
+        meta: { title: '日志记录', keepAlive: true, icon: 'book'},
+      },
+     
+    ]
+  },
+  {
+    path: '/report',
+    name: 'report',
+    component: BasicLayout,
+    meta: { title: '报表' },
+    redirect: '/report/record',
+    children:[
+      {
+        path:'/report/record',
+        name: 'reportrecord',
+        component: RouteView,
+        meta: { title: '报表记录', keepAlive: true, icon: 'table'},
+      },
+     
+    ]
+  },
+  {
+    path: '/datum',
+    name: 'datum',
+    component: BasicLayout,
+    meta: { title: '数据' },
+    redirect: '/datum/curve',
+    children:[
+      {
+        path:'/datum/curve',
+        name: 'datumcurve',
+        component: RouteView,
+        meta: { title: '曲线图表', keepAlive: true, icon: 'line-chart'},
+      },
+      {
+        path:'/datum/columnar',
+        name: 'datumcolumnar',
+        component: RouteView,
+        meta: { title: '柱状图表', keepAlive: true, icon: 'bar-chart'},
+      },
+     
+    ]
+  },
+
   {
     path: '*', redirect: '/404', hidden: true
   }

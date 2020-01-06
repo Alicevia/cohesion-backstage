@@ -13,6 +13,7 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
+  linkActiveClass: 'active',
   base: process.env.BASE_URL,
   scrollBehavior: () => ({ y: 0 }),
   routes:constantRouterMap.concat(asyncRouterMap)

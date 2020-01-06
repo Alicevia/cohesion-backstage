@@ -18,7 +18,7 @@
         @menuSelect="menuSelect"
       ></side-menu>
     </a-drawer>
-  
+
     <side-menu
       v-else-if="isSideMenu()"
       mode="inline"
@@ -28,7 +28,10 @@
       :collapsible="true"
     ></side-menu>
 
-    <a-layout :class="[layoutMode, `content-width-${contentWidth}`]" :style="{ paddingLeft: contentPaddingLeft, minHeight: '100vh' }">
+    <a-layout
+      :class="[layoutMode, `content-width-${contentWidth}`]"
+      :style="{ paddingLeft: contentPaddingLeft, minHeight: '100vh' }"
+    >
       <!-- layout header -->
       <global-header
         :mode="layoutMode"
@@ -40,7 +43,9 @@
       />
 
       <!-- layout content -->
-      <a-layout-content :style="{ height: '100%', margin: '24px 24px 0', paddingTop: fixedHeader ? '64px' : '0' }">
+      <a-layout-content
+        :style="{ height: '100%', margin: '24px 24px 0', paddingTop: fixedHeader ? '64px' : '0' }"
+      >
         <multi-tab v-if="multiTab"></multi-tab>
         <transition name="page-transition">
           <route-view />
@@ -50,13 +55,12 @@
       <!-- layout footer -->
       <!-- <a-layout-footer>
         <global-footer />
-      </a-layout-footer> -->
+      </a-layout-footer>-->
 
       <!-- Setting Drawer (show in development mode) -->
       <setting-drawer v-if="!production"></setting-drawer>
     </a-layout>
   </a-layout>
-
 </template>
 
 <script>
@@ -71,7 +75,7 @@ import GlobalHeader from '@/components/GlobalHeader'
 import GlobalFooter from '@/components/GlobalFooter'
 import SettingDrawer from '@/components/SettingDrawer'
 
-import { asyncRouterMap } from '@/config/router.config.js'//新增用于自己控制路由
+import { asyncRouterMap } from '@/config/router.config.js' //新增用于自己控制路由
 
 export default {
   name: 'BasicLayout',
@@ -83,7 +87,7 @@ export default {
     GlobalFooter,
     SettingDrawer
   },
-  data () {
+  data() {
     return {
       production: config.production,
       collapsed: false,
@@ -95,7 +99,7 @@ export default {
       // 动态主路由 addRouters里面是动态生成的路由 通过发请求之类
       mainMenu: state => state.permission.addRouters
     }),
-    contentPaddingLeft () {
+    contentPaddingLeft() {
       if (!this.fixSidebar || this.isMobile()) {
         return '0'
       }
@@ -106,17 +110,31 @@ export default {
     }
   },
   watch: {
-    sidebarOpened (val) {
+    sidebarOpened(val) {
       this.collapsed = !val
     }
   },
-  created () {
-      this.menus = asyncRouterMap.find((item) => item.path === '/').children//用于自己控制路由
+  created() {
+    console.log(asyncRouterMap)
+    console.log(this.$route.path)
+    let { path } = this.$route
+    this.menus = asyncRouterMap.find(item => item.redirect === path || item.path === path).children //用于自己控制路由
+    // this.menus = asyncRouterMap.find((item) => item.path === '/').children//用于自己控制路由
     //this.menus = this.mainMenu.find(item => item.path === '/').children
-    console.log(this.menus)
+    // this.menus = asyncRouterMap.find(item=>item.path)
+    // console.log(this.menus)
     this.collapsed = !this.sidebarOpened
   },
-  mounted () {
+
+  beforeRouteLeave(to, from, next) {
+    // 导航离开该组件的对应路由时调用
+    // 可以访问组件实例 `this`
+    let { path } = to
+    console.log(to)
+    this.menus = asyncRouterMap.find(item => item.redirect === path || item.path === path).children
+    next()
+  },
+  mounted() {
     const userAgent = navigator.userAgent
     if (userAgent.indexOf('Edge') > -1) {
       this.$nextTick(() => {
@@ -129,12 +147,12 @@ export default {
   },
   methods: {
     ...mapActions(['setSidebar']),
-    toggle () {
+    toggle() {
       this.collapsed = !this.collapsed
       this.setSidebar(!this.collapsed)
       triggerWindowResizeEvent()
     },
-    paddingCalc () {
+    paddingCalc() {
       let left = ''
       if (this.sidebarOpened) {
         left = this.isDesktop() ? '256px' : '80px'
@@ -143,9 +161,8 @@ export default {
       }
       return left
     },
-    menuSelect () {
-    },
-    drawerClose () {
+    menuSelect() {},
+    drawerClose() {
       this.collapsed = false
     }
   }

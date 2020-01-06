@@ -6,8 +6,8 @@
         :class="[fixedHeader && 'ant-header-fixedHeader', sidebarOpened ? 'ant-header-side-opened' : 'ant-header-side-closed', ]"
         :style="{ padding: '0',height:'110px'}">
         <div v-if="mode === 'sidemenu'" class="header" style="height:110px;lineHeight:110px;backgroundColor:#354052" >
-          <a-icon  v-if="device==='mobile'" class="trigger" :type="collapsed ? 'menu-fold' : 'menu-unfold'" @click="toggle"/>
-          <a-icon v-else class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggle"/>
+          <!-- <a-icon  v-if="device==='mobile'" class="trigger" :type="collapsed ? 'menu-fold' : 'menu-unfold'" @click="toggle"/>
+          <a-icon v-else class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggle"/> -->
           <!-- <user-menu></user-menu> -->
           <HeaderList></HeaderList>
         </div>
@@ -31,7 +31,7 @@ import UserMenu from '../tools/UserMenu'
 import SMenu from '../Menu/'
 import Logo from '../tools/Logo'
 import { mixin } from '@/utils/mixin'
-import HeaderList from '../tools/HeaderList'
+import HeaderList from '../MyComponents/HeaderList'
 export default {
   name: 'GlobalHeader',
   components: {
