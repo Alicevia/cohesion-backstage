@@ -23,6 +23,8 @@ Vue.config.productionTip = false
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)
 
+store.state.projectId = Vue.ls.get('projectId')
+
 new Vue({
   router,
   store,

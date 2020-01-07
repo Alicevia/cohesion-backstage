@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
-import { bxAnaalyse } from '@/core/icons'
+// import { bxAnaalyse } from '@/core/icons
 
 // export const asyncRouterMap = [
 
@@ -335,6 +335,7 @@ export const asyncRouterMap = [
     path:'/',
     redirect:'/index'
   },
+  // 首页
   {
     path: '/index',
     name: 'index',
@@ -345,17 +346,18 @@ export const asyncRouterMap = [
       {
         path: '/index/view',
         name: 'view',
-        component: RouteView,
+        component: ()=>import('myPages/index/view/view.vue'),
         meta: { title: '项目总览', keepAlive: true, icon: 'appstore' },
       },
       {
         path: '/index/project',
         name: 'project',
-        component: RouteView,
+        component: ()=>import('myPages/index/projects/projects.vue'),
         meta: { title: '项目列表', keepAlive: true, icon: 'bars'},
       },
     ]
   },
+  // 账户
   {
     path: '/account',
     name: 'account',
@@ -377,6 +379,7 @@ export const asyncRouterMap = [
       // },
     ]
   },
+  // 监控
   {
     path: '/monitor',
     name: 'monitor',
@@ -387,7 +390,7 @@ export const asyncRouterMap = [
       {
         path: '/monitor/data',
         name: 'monitordata',
-        component: RouteView,
+        component: ()=>import('myPages/monitor/data/data'),
         meta: { title: '数据监控', keepAlive: true, icon: 'bar-chart' },
       },
       {
@@ -433,7 +436,7 @@ export const asyncRouterMap = [
         path:'/manage/simulation',
         name: 'managesimulation',
         component: RouteView,
-        meta: { title: '模拟场景', keepAlive: true, icon: 'retweet'},
+        meta: { title: '模拟管理', keepAlive: true, icon: 'retweet'},
       },
       {
         path:'/manage/screen',

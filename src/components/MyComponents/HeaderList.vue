@@ -1,7 +1,7 @@
 <template>
   <div class="header-list">
     <div class="header-left">
-      <ul class="header-item">
+      <ul class="header-item" v-show="projectId">
          <router-link tag="li" to="/monitor">
           <span class="iconfont">&#xe60b;</span>
           <p>监控</p>
@@ -44,12 +44,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return {}
   },
 
-  computed: {},
+  computed: {
+    ...mapState(['projectId'])
+  },
 
   mounted() {},
 

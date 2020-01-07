@@ -14,3 +14,6 @@ export const CONTENT_WIDTH_TYPE = {
   Fluid: 'Fluid',
   Fixed: 'Fixed'
 }
+
+export const UPDATE_PROJECT_ID = 'UPDATE_PROJECT_ID'
+

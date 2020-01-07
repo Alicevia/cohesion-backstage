@@ -115,10 +115,11 @@ export default {
     }
   },
   created() {
-    console.log(asyncRouterMap)
-    console.log(this.$route.path)
-    let { path } = this.$route
-    this.menus = asyncRouterMap.find(item => item.redirect === path || item.path === path).children //用于自己控制路由
+    // console.log(asyncRouterMap)
+    // console.log(this.$route)//当前路由
+    let { path } = this.$route.matched[0]
+    // console.log(path)
+    this.menus = asyncRouterMap.find(item =>(item.path === path)).children //用于自己控制路由
     // this.menus = asyncRouterMap.find((item) => item.path === '/').children//用于自己控制路由
     //this.menus = this.mainMenu.find(item => item.path === '/').children
     // this.menus = asyncRouterMap.find(item=>item.path)
@@ -130,7 +131,7 @@ export default {
     // 导航离开该组件的对应路由时调用
     // 可以访问组件实例 `this`
     let { path } = to
-    console.log(to)
+    // console.log(to)
     this.menus = asyncRouterMap.find(item => item.redirect === path || item.path === path).children
     next()
   },
