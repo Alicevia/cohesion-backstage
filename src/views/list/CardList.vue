@@ -2,18 +2,18 @@
   <div class="card-list" ref="content">
     <a-list
       rowKey="id"
-      :grid="{gutter: 24, lg: 3, md: 2, sm: 1, xs: 1}"
+      :grid="{gutter: 24,xxl:6,xl:6, lg:4, md: 3, sm: 2, xs: 1}"
       :dataSource="dataSource"
     >
       <a-list-item slot="renderItem" slot-scope="item">
-        <template v-if="!item || item.id === undefined">
+        <!-- <template v-if="!item || item.id === undefined">
           <a-button class="new-btn" type="dashed">
             <a-icon type="plus"/>
             新增产品
           </a-button>
-        </template>
-        <template v-else>
-          <a-card :hoverable="true">
+        </template> -->
+        <template>
+          <a-card :hoverable="true" size='small'>
             <a-card-meta>
               <a slot="title">{{ item.title }}</a>
               <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large"/>
@@ -33,8 +33,7 @@
 <script>
 
 const dataSource = []
-dataSource.push({})
-for (let i = 0; i < 11; i++) {
+for (let i = 0; i < 20; i++) {
   dataSource.push({
     id: i,
     title: 'Alipay',

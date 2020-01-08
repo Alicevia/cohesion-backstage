@@ -43,6 +43,7 @@ const vueConfig = {
     config.resolve.alias
       .set('@$', resolve('src'))
       .set('myPages',resolve('src/views/myPages'))
+      .set('views',resolve('src/views'))
 
     const svgRule = config.module.rule('svg')
     svgRule.uses.clear()

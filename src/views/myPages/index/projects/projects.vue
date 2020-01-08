@@ -1,29 +1,30 @@
 <template>
   <div>
-    <router-link :to="{path:'/monitor/data'}" @click.native="updateProjectId(1)">kk1k</router-link>
+    <CardList></CardList>
+    <!-- <router-link :to="{path:'/monitor/data'}" @click.native="updateProjectId(1)">kk1k</router-link> -->
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import CardList from 'views/list/CardList'
+import { mapActions } from 'vuex'
 export default {
-  data () {
-    return {
-    };
+  data() {
+    return {}
   },
 
   computed: {},
 
-  mounted(){},
+  mounted() {},
 
   methods: {
-    ...mapActions(['updateProjectId']),
-    
+    ...mapActions(['updateProjectId'])
   },
 
-  components: {},
+  components: {
+    CardList
+  }
 }
-
 </script>
 <style lang='less' scoped>
 </style>
