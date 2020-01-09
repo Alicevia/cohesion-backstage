@@ -5,13 +5,16 @@
       :grid="{gutter: 24,xxl:6,xl:6, lg:4, md: 3, sm: 2, xs: 1}"
       :dataSource="dataSource"
     >
-      <a-list-item slot="renderItem" slot-scope="item">
-        <!-- <template v-if="!item || item.id === undefined">
+    <template  v-slot:renderItem='item'>
+      <slot :item='item' name="renderItem"></slot>
+    </template>
+      <!-- <a-list-item slot="renderItem" slot-scope="item">
+        <template v-if="!item || item.id === undefined">
           <a-button class="new-btn" type="dashed">
             <a-icon type="plus"/>
             新增产品
           </a-button>
-        </template> -->
+        </template>
         <template>
           <a-card :hoverable="true" size='small'>
             <a-card-meta>
@@ -25,7 +28,7 @@
             </template>
           </a-card>
         </template>
-      </a-list-item>
+      </a-list-item> -->
     </a-list>
   </div>
 </template>
@@ -35,8 +38,10 @@
 const dataSource = []
 for (let i = 0; i < 20; i++) {
   dataSource.push({
-    id: i,
+    id: i+1,
     title: 'Alipay',
+    normal:'1313',
+    unnormal:'332',
     avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
     content: '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。'
   })

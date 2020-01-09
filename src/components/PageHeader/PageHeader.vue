@@ -65,7 +65,7 @@ export default {
 <style lang="less" scoped>
 .page-header {
   background: #fff;
-  padding: 16px 32px 0;
+  padding: 16px 32px 12px;
   border-bottom: 1px solid #e8e8e8;
 
   .breadcrumb {
@@ -75,7 +75,6 @@ export default {
   .detail {
     display: flex;
     /*margin-bottom: 16px;*/
-
     .avatar {
       flex: 0 1 72px;
       margin: 0 24px 8px 0;
@@ -155,6 +154,7 @@ export default {
 
 .mobile .page-header {
   .main {
+    
     .row {
       flex-wrap: wrap;
 

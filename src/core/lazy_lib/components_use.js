@@ -46,10 +46,11 @@ import {
   Skeleton,
   Popconfirm,
   message,
-  notification
+  notification,
+  Pagination
 } from 'ant-design-vue'
 // import VueCropper from 'vue-cropper'
-
+Vue.use(Pagination)
 Vue.use(LocaleProvider)
 Vue.use(Layout)
 Vue.use(Input)

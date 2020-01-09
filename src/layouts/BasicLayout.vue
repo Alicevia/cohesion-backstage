@@ -91,6 +91,7 @@ export default {
     return {
       production: config.production,
       collapsed: false,
+      goBack:false,
       menus: []
     }
   },
@@ -118,7 +119,8 @@ export default {
     // console.log(asyncRouterMap)
     // console.log(this.$route)//当前路由
     let { path } = this.$route.matched[0]
-    // console.log(path)
+    console.log(path)
+    console.log(asyncRouterMap)
     this.menus = asyncRouterMap.find(item =>(item.path === path)).children //用于自己控制路由
     // this.menus = asyncRouterMap.find((item) => item.path === '/').children//用于自己控制路由
     //this.menus = this.mainMenu.find(item => item.path === '/').children
@@ -130,12 +132,24 @@ export default {
   beforeRouteLeave(to, from, next) {
     // 导航离开该组件的对应路由时调用
     // 可以访问组件实例 `this`
+    
     let { path } = to
-    // console.log(to)
-    this.menus = asyncRouterMap.find(item => item.redirect === path || item.path === path).children
+    // console.log(path)
+    // console.log(asyncRouterMap)
+    let menus = asyncRouterMap.find(item=>item.path!=='/' &&path.includes(item.path))
+    // console.log(menus)
+    this.menus = menus.children
+
     next()
   },
   mounted() {
+      // if (window.history && window.history.pushState) {
+      //   // 向历史记录中插入了当前页
+      //   history.pushState(null, null, document.URL);
+      //   window.addEventListener('popstate', ()=>{this.goBack=true}, false);
+      // }
+
+
     const userAgent = navigator.userAgent
     if (userAgent.indexOf('Edge') > -1) {
       this.$nextTick(() => {

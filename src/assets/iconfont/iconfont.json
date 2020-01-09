@@ -13,6 +13,13 @@
       "unicode_decimal": 58956
     },
     {
+      "icon_id": "1171798",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e710",
+      "unicode_decimal": 59152
+    },
+    {
       "icon_id": "1576548",
       "name": "账户",
       "font_class": "zhanghu",
