@@ -27,11 +27,11 @@
     </div>
     <div class="header-right">
       <ul class="header-item">
-        <router-link tag="li" to="/index">
+        <router-link tag="li" to="/index" @click.native="clearProjectId">
           <span class="iconfont">&#xe600;</span>
           <p>首页</p>
         </router-link>
-        <router-link tag="li" to="/account">
+        <router-link tag="li" to="/account" @click.native="clearProjectId">
          <span class="iconfont">&#xe643;</span>
           <p>账户</p></router-link>
         <li>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -57,7 +57,12 @@ export default {
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    ...mapActions(['updateProjectId']),
+    clearProjectId(){
+      // this.updateProjectId('')
+    }
+  },
 
   components: {}
 }

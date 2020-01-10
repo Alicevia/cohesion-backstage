@@ -17,8 +17,9 @@ import PermissionHelper from '@/utils/helper/permission'
 // import '@/components/use'
 import './directives/action'
 
-VueClipboard.config.autoSetContainer = true
 
+
+VueClipboard.config.autoSetContainer = true
 Vue.use(Antd)
 Vue.use(Viser)
 Vue.use(MultiTab)

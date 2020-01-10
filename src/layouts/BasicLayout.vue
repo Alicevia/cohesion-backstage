@@ -44,7 +44,7 @@
 
       <!-- layout content -->
       <a-layout-content
-        :style="{ height: '100%', margin: '24px 24px 0', paddingTop: fixedHeader ? '64px' : '0' }"
+        :style="{height: '100%',backgroundColor:'#F1F1F1', margin: '24px 24px 0', paddingTop: fixedHeader ? '64px' : '0' }"
       >
         <multi-tab v-if="multiTab"></multi-tab>
         <transition name="page-transition">
@@ -58,7 +58,7 @@
       </a-layout-footer>-->
 
       <!-- Setting Drawer (show in development mode) -->
-      <setting-drawer v-if="!production"></setting-drawer>
+      <!-- <setting-drawer v-if="!production"></setting-drawer> -->
     </a-layout>
   </a-layout>
 </template>
@@ -76,7 +76,7 @@ import GlobalFooter from '@/components/GlobalFooter'
 import SettingDrawer from '@/components/SettingDrawer'
 
 import { asyncRouterMap } from '@/config/router.config.js' //新增用于自己控制路由
-
+import Bus from '@/utils/bus'
 export default {
   name: 'BasicLayout',
   mixins: [mixin, mixinDevice],
@@ -91,8 +91,9 @@ export default {
     return {
       production: config.production,
       collapsed: false,
-      goBack:false,
-      menus: []
+      goBack: false,
+      menus: [],
+      marginValue: '24px 24px 0'
     }
   },
   computed: {
@@ -119,9 +120,9 @@ export default {
     // console.log(asyncRouterMap)
     // console.log(this.$route)//当前路由
     let { path } = this.$route.matched[0]
-    console.log(path)
-    console.log(asyncRouterMap)
-    this.menus = asyncRouterMap.find(item =>(item.path === path)).children //用于自己控制路由
+    // console.log(path)
+    // console.log(asyncRouterMap)
+    this.menus = asyncRouterMap.find(item => item.path === path).children //用于自己控制路由
     // this.menus = asyncRouterMap.find((item) => item.path === '/').children//用于自己控制路由
     //this.menus = this.mainMenu.find(item => item.path === '/').children
     // this.menus = asyncRouterMap.find(item=>item.path)
@@ -132,23 +133,23 @@ export default {
   beforeRouteLeave(to, from, next) {
     // 导航离开该组件的对应路由时调用
     // 可以访问组件实例 `this`
-    
     let { path } = to
     // console.log(path)
     // console.log(asyncRouterMap)
-    let menus = asyncRouterMap.find(item=>item.path!=='/' &&path.includes(item.path))
+    let menus = asyncRouterMap.find(item => item.path !== '/' && path.includes(item.path))
     // console.log(menus)
     this.menus = menus.children
-
     next()
   },
   mounted() {
-      // if (window.history && window.history.pushState) {
-      //   // 向历史记录中插入了当前页
-      //   history.pushState(null, null, document.URL);
-      //   window.addEventListener('popstate', ()=>{this.goBack=true}, false);
-      // }
-
+    // if (window.history && window.history.pushState) {
+    //   // 向历史记录中插入了当前页
+    //   history.pushState(null, null, document.URL);
+    //   window.addEventListener('popstate', ()=>{this.goBack=true}, false);
+    // }
+    // Bus.$on('changeMargin',data=>{
+    //   this.marginValue = data
+    // })
 
     const userAgent = navigator.userAgent
     if (userAgent.indexOf('Edge') > -1) {
@@ -180,6 +181,20 @@ export default {
     drawerClose() {
       this.collapsed = false
     }
+  },
+  watch: {
+    // $route: {
+    //   handler: function(to, from) {
+        
+    //     if (to.fullPath==='/monitor/map') {
+    //       this.marginValue = '24px0 0'
+    //     }else{
+    //       this.marginValue = '24px 24px 0'
+    //     }
+    //   },
+    //   // 深度观察监听
+    //   deep: true
+    // }
   }
 }
 </script>

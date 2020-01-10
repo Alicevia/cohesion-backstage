@@ -396,7 +396,7 @@ export const asyncRouterMap = [
       {
         path: '/monitor/map',
         name: 'monitormap',
-        component: RouteView,
+        component:  ()=>import('myPages/monitor/map/map.vue'),
         meta: { title: '场景地图', keepAlive: true, icon: 'heat-map' },
       },
       {
@@ -413,6 +413,7 @@ export const asyncRouterMap = [
       },
     ]
   },
+  // 管理
   {
     path: '/manage',
     name: 'manage',
@@ -423,20 +424,20 @@ export const asyncRouterMap = [
       {
         path:'/manage/group',
         name: 'managegroup',
-        component: RouteView,
+        component: ()=>import('myPages/manage/group/group.vue'),
         meta: { title: '分组管理', keepAlive: true, icon: 'cluster'},
       },
       {
         path:'/manage/device',
         name: 'managedevice',
-        component: RouteView,
+        component:  ()=>import('myPages/manage/device/device.vue'),
         meta: { title: '设备管理', keepAlive: true, icon: 'printer'},
       },
       {
         path:'/manage/simulation',
         name: 'managesimulation',
-        component: RouteView,
-        meta: { title: '模拟管理', keepAlive: true, icon: 'retweet'},
+        component:  ()=>import('myPages/manage/simulation/simulation.vue'),
+        meta: { title: '场景管理', keepAlive: true, icon: 'retweet'},
       },
       {
         path:'/manage/screen',
@@ -447,6 +448,7 @@ export const asyncRouterMap = [
 
     ]
   },
+  // 日志
   {
     path: '/log',
     name: 'log',
@@ -457,7 +459,7 @@ export const asyncRouterMap = [
       {
         path:'/log/record',
         name: 'logrecord',
-        component: RouteView,
+        component:  ()=>import('myPages/log/record/record.vue'),
         meta: { title: '日志记录', keepAlive: true, icon: 'book'},
       },
      

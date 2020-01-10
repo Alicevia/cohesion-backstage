@@ -2,26 +2,19 @@
   <div>
     <PageView :title="false">
       <template #headerContent>
-        <a-radio-group @change="onChange" v-model="value">
-          <a-radio value="data">数据</a-radio>
-          <a-radio value="table">列表</a-radio>
-        </a-radio-group>
-
+        <span style="fontSize:16px;marginRight:30px">设备管理：{{4}}</span>
         <a-select style="width: 120px;marginLeft:50px" placeholder="请选择分组" @change="handleChange">
           <a-select-option value="jack">Jack</a-select-option>
           <a-select-option value="lucy">Lucy</a-select-option>
           <a-select-option value="Yiminghe">yiminghe</a-select-option>
         </a-select>
-        <a-input style="width:200px;margin:0 10px" placeholder="请输入项目名称" />
-
-        <a-button type="primary" style="margin:0 10px 0 0">查询</a-button>
+        <a-button type="primary" style="margin:0 10px 0 10px">新增设备</a-button>
       </template>
       <template slot="extra">
         <a-pagination :defaultCurrent="1" :total="500" />
       </template>
     </PageView>
-    <!-- <TableShow :columns='columns' :tableData=''></TableShow> -->
-    <CardList v-if="false">
+    <CardList>
       <a-list-item slot="renderItem" slot-scope="{item}">
         <template>
           <a-card :hoverable="true" :title="item.title" size="small" class="card">
@@ -47,79 +40,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import CardList from 'views/list/CardList'
-// import TableShow from '@/components/MyComponents/TableShow'
 import PageView from '@/layouts/PageView'
-let columns = [
-  {
-    align: 'center',
-    title: '序号',
-    key: 'sort',
-    scopedSlots: { customRender: 'sort' },
-    width: 60
-  },
-  { align: 'center', title: '设备名称', dataIndex: 'name', key: 'name' },
-  { align: 'center', title: '设备类型', dataIndex: 'address', key: 'address' },
-  { align: 'center', title: '当前数值', dataIndex: 'year', key: 'year' },
-  { align: 'center', title: '所属分组', dataIndex: 'area', key: 'area' },
-  {
-    align: 'center',
-    title: '报警',
-    dataIndex: 'varieties',
-    key: 'varieties'
-  },
-  {
-    align: 'center',
-    title: '设备编号',
-    dataIndex: 'varieties1',
-    key: 'varieties1'
-  },
-
-  {
-    align: 'center',
-    title: '刷新时间',
-    key: 'action',
-    scopedSlots: { customRender: 'action' }
-  }
-]
-let dataSource = []
-// for (let i = 0; i < array.length; i++) {
-//   dataSource.push({
-
-//   })
-
-// }
-
+import CardList from 'views/list/CardList'
 export default {
   data() {
-    return {
-      value: 'data'
-    }
+    return {}
   },
 
-  computed: {
-    ...mapState(['projectId'])
-  },
+  computed: {},
 
-  mounted() {
-    // console.log(this.$route)
-  },
+  mounted() {},
 
-  methods: {
-    // 单选框
-    onChange(e) {
-      console.log('radio checked', e.target.value)
-    },
-    // 分组
-    handleChange(value) {
-      console.log(`selected ${value}`)
-    }
-  },
+  methods: {},
 
   components: {
-    CardList,
-    PageView
+    PageView,
+    CardList
   }
 }
 </script>
@@ -132,26 +68,29 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .meta-content {
+    .meta-content{
       margin: 0;
       p {
         padding: 0;
         margin: 0;
         margin-top: 4px;
         white-space: nowrap;
+
+
       }
     }
   }
 }
 /deep/ .ant-card-head {
   background-color: #c2c8d2;
-  border-radius: 15px 15px 0 0;
+  border-radius: 5px 5px 0 0;
   height: 40px;
 }
 /deep/.ant-card-body {
   background-color: #fff;
-  border-radius: 0 0 15px 15px;
+  border-radius:  0 0 5px 5px;
   overflow: hidden;
+
 }
 .extra {
   font-weight: bold;

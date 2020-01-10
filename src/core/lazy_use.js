@@ -13,6 +13,10 @@ import PageLoading from '@/components/PageLoading'
 import PermissionHelper from '@/utils/helper/permission'
 import './directives/action'
 
+
+import VueAMap from 'vue-amap'
+Vue.use(VueAMap)
+
 VueClipboard.config.autoSetContainer = true
 
 Vue.use(Viser)
