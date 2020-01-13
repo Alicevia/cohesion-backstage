@@ -24,10 +24,10 @@
             <a-input
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="请输入手机号"
               v-decorator="[
-                'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                'phone',
+                {rules: [{ required: true, len:11, message: '请输入11位手机号' }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -39,7 +39,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码: admin or ant.design"
+              placeholder="请输入密码"
               v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -49,59 +49,19 @@
             </a-input>
           </a-form-item>
         </a-tab-pane>
-        <a-tab-pane key="tab2" tab="手机号登录">
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="手机号"
-              v-decorator="['mobile', {rules: [{ required: true, pattern: /^1\d{10}$/, message: '请输入正确的手机号' }], validateTrigger: 'change'}]"
-            >
-              <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }" />
-            </a-input>
-          </a-form-item>
-
-          <a-row :gutter="16">
-            <a-col class="gutter-row" :span="16">
-              <a-form-item>
-                <a-input
-                  size="large"
-                  type="text"
-                  placeholder="验证码"
-                  v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]"
-                >
-                  <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
-                </a-input>
-              </a-form-item>
-            </a-col>
-            <a-col class="gutter-row" :span="8">
-              <a-button
-                class="getCaptcha"
-                tabindex="-1"
-                :disabled="state.smsSendBtn"
-                @click.stop.prevent="getCaptcha"
-                v-text="!state.smsSendBtn && '获取验证码' || (state.time+' s')"
-              ></a-button>
-            </a-col>
-          </a-row>
-        </a-tab-pane>
-        <a-tab-pane key="tab3" tab="微信登陆">
-            <div>
-              <img class="qrcode" src="~@/assets/images/wechat.png" alt="">
-            </div>
+        <a-tab-pane key="tab2" tab="微信登陆">
+          <div>
+            <img class="qrcode" src="~@/assets/images/wechat.png" alt="">
+          </div>
         </a-tab-pane>
       </a-tabs>
 
-      <template v-if="!(customActiveKey==='tab3')">
+      <template v-if="!(customActiveKey==='tab2')">
 
       <a-form-item>
         <!-- <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox> -->
-        
-        <router-link
-          :to="{ name: 'recover', params: { user: 'aaa'} }"
-          class="forge-password"
-         
-        >忘记密码</router-link>
+        <router-link :to="{ name: 'recover', params: { user: 'aaa'} }"
+          class="forge-password">忘记密码</router-link>
         <router-link  style="float: right;" class="register" :to="{ name: 'register' }">注册账户</router-link>
 
       </a-form-item>
@@ -132,7 +92,7 @@
 </template>
 
 <script>
-import md5 from 'md5'
+
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
@@ -174,20 +134,9 @@ export default {
   methods: {
     ...mapActions(['Login', 'Logout']),
     // handler
-    handleUsernameOrEmail(rule, value, callback) {
-      const { state } = this
-      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
-      if (regex.test(value)) {
-        state.loginType = 0
-      } else {
-        state.loginType = 1
-      }
-      callback()
-    },
+
     handleTabClick(key) {
-      console.log(key==='tab3')
       this.customActiveKey = key
-      
       // this.form.resetFields()
     },
     handleSubmit(e) {
@@ -198,73 +147,17 @@ export default {
         customActiveKey,
         Login
       } = this
-
       state.loginBtn = true
-
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+      validateFields((err, values) => {
         if (!err) {
-          console.log('login form', values)
-          const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
-          Login(loginParams)
-            .then(res => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
-            })
-        } else {
-          setTimeout(() => {
-            state.loginBtn = false
-          }, 600)
-        }
+
+    
+         
+        } 
       })
     },
-    getCaptcha(e) {
-      e.preventDefault()
-      const {
-        form: { validateFields },
-        state
-      } = this
 
-      validateFields(['mobile'], { force: true }, (err, values) => {
-        if (!err) {
-          state.smsSendBtn = true
 
-          const interval = window.setInterval(() => {
-            if (state.time-- <= 0) {
-              state.time = 60
-              state.smsSendBtn = false
-              window.clearInterval(interval)
-            }
-          }, 1000)
-
-          const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile })
-            .then(res => {
-              setTimeout(hide, 2500)
-              this.$notification['success']({
-                message: '提示',
-                description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-                duration: 8
-              })
-            })
-            .catch(err => {
-              setTimeout(hide, 1)
-              clearInterval(interval)
-              state.time = 60
-              state.smsSendBtn = false
-              this.requestFailed(err)
-            })
-        }
-      })
-    },
-    stepCaptchaSuccess() {
-      this.loginSuccess()
-    },
     stepCaptchaCancel() {
       this.Logout().then(() => {
         this.loginBtn = false

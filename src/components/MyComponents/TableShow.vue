@@ -14,9 +14,9 @@
       class="table-header"
       :bordered='true'
     >
-      <!-- <template slot="sort" slot-scope="record,item,index">
+      <template slot="sort" slot-scope="record,item,index">
         <span>{{index+1}}</span>
-      </template> -->
+      </template>
       <template slot="action" slot-scope="record,item,index">
         <slot name="action" :record='record' ></slot>
       </template>
@@ -49,11 +49,11 @@ export default {
 .table-header{
   background-color: #fff;
   /deep/ .ant-table-tbody > tr > td {
-    padding: 12px 16px;
+    padding: 9px 16px;
   }
   /deep/ .ant-table-thead th {
     background-color:#C2C8D2;
-    // padding:15px;
+    padding:12px;
   }
   /deep/.ant-table-tbody > tr:hover > td{
     background-color:#F6F6F6

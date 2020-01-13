@@ -1,15 +1,15 @@
 <template>
   <div id="userLayout" :class="['user-layout-wrapper', device]">
-    <div class="container">
+    <div class="container" style="paddingTop:150px">
       <div class="top">
         <div class="header">
-          <a href="/">
-            <img src="~@/assets/logo.svg" class="logo" alt="logo">
-            <span class="title">Ant Design</span>
+          <a href="javascript:;">
+            <!-- <img src="~@/assets/images/logo.png" class="logo" alt="logo"> -->
+            <span class="title">凝聚通讯后台管理系统</span>
           </a>
         </div>
         <div class="desc">
-          凝聚后台管理系统
+  
         </div>
       </div>
 
@@ -100,9 +100,9 @@ export default {
 
           .title {
             font-size: 33px;
-            color: rgba(0, 0, 0, .85);
+            color: #009ec5;
             font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-            font-weight: 600;
+            font-weight: 510;
             position: relative;
             top: 2px;
           }

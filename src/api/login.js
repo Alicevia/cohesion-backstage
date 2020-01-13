@@ -12,11 +12,12 @@ import { axios } from '@/utils/request'
  * @param parameter
  * @returns {*}
  */
-export function login (parameter) {
+export function login (data) {
+  console.log(data)
   return axios({
-    url: '/auth/login',
+    url: 'register/login',
     method: 'post',
-    data: parameter
+    data
   })
 }
 

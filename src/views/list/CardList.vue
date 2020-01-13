@@ -2,7 +2,7 @@
   <div class="card-list" ref="content">
     <a-list
       rowKey="id"
-      :grid="{gutter: 24,xxl:6,xl:6, lg:4, md: 3, sm: 2, xs: 1}"
+      :grid="{gutter: 24,xl:4, lg:4, md: 3, sm: 2, xs: 1}"
       :dataSource="dataSource"
     >
     <template  v-slot:renderItem='item'>
@@ -49,6 +49,7 @@ for (let i = 0; i < 20; i++) {
 
 export default {
   name: 'CardList',
+  props:['dataSource'],
   data () {
     return {
       description: '段落示意：蚂蚁金服务设计平台 ant.design，用最小的工作量，无缝接入蚂蚁金服生态， 提供跨越设计与开发的体验解决方案。',
@@ -68,7 +69,6 @@ export default {
         { icon: 'file-text', href: '#', title: '产品文档' }
       ],
       extraImage: 'https://gw.alipayobjects.com/zos/rmsportal/RzwpdLnhmvDJToTdfDPe.png',
-      dataSource
     }
   },
   methods: {
@@ -113,9 +113,9 @@ export default {
   }
 
   .card-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 48px;
+    width: 60px;
+    height: 60px;
+
   }
 
   .ant-card-actions {

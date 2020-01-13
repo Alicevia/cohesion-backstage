@@ -2,7 +2,7 @@
   <div>
     <PageView :title="false">
       <template #headerContent>
-        <a-radio-group @change="onChange" v-model="value">
+        <a-radio-group @change="onChange" v-model="showMethod">
           <a-radio value="data">数据</a-radio>
           <a-radio value="table">列表</a-radio>
         </a-radio-group>
@@ -20,8 +20,10 @@
         <a-pagination :defaultCurrent="1" :total="500" />
       </template>
     </PageView>
-    <!-- <TableShow :columns='columns' :tableData=''></TableShow> -->
-    <CardList v-if="false">
+    <TableShow :columns='columns' :tableData='dataSource' :pagination='false'   v-if="showMethod==='table'">
+
+    </TableShow>
+    <CardList :dataSource='dataSource' v-else>
       <a-list-item slot="renderItem" slot-scope="{item}">
         <template>
           <a-card :hoverable="true" :title="item.title" size="small" class="card">
@@ -49,7 +51,7 @@
 <script>
 import { mapState } from 'vuex'
 import CardList from 'views/list/CardList'
-// import TableShow from '@/components/MyComponents/TableShow'
+import TableShow from '@/components/MyComponents/TableShow'
 import PageView from '@/layouts/PageView'
 let columns = [
   {
@@ -57,44 +59,55 @@ let columns = [
     title: '序号',
     key: 'sort',
     scopedSlots: { customRender: 'sort' },
-    width: 60
+    width: 70
   },
   { align: 'center', title: '设备名称', dataIndex: 'name', key: 'name' },
-  { align: 'center', title: '设备类型', dataIndex: 'address', key: 'address' },
-  { align: 'center', title: '当前数值', dataIndex: 'year', key: 'year' },
-  { align: 'center', title: '所属分组', dataIndex: 'area', key: 'area' },
+  { align: 'center', title: '设备类型', dataIndex: 'type', key: 'type' },
+  { align: 'center', title: '当前数值', dataIndex: 'value', key: 'value' },
+  { align: 'center', title: '所属分组', dataIndex: 'group', key: 'group' },
   {
     align: 'center',
     title: '报警',
-    dataIndex: 'varieties',
-    key: 'varieties'
+    dataIndex: 'warning',
+    key: 'warning'
   },
   {
     align: 'center',
     title: '设备编号',
-    dataIndex: 'varieties1',
-    key: 'varieties1'
+    dataIndex: 'number',
+    key: 'number'
   },
 
   {
     align: 'center',
     title: '刷新时间',
-    key: 'action',
-    scopedSlots: { customRender: 'action' }
+    key: 'time',
+    dataIndex:'time'
+    // scopedSlots: { customRender: 'action' }
   }
 ]
 let dataSource = []
-// for (let i = 0; i < array.length; i++) {
-//   dataSource.push({
+for (let i = 0; i < 16; i++) {
+  dataSource.push({
+    id:i,
+    sort:i,
+    name:'张三'+i,
+    type:1,
+    value:i+10,
+    group:'分组',
+    warning:'否',
+    number:1000+i,
+    time:2019
+  })
 
-//   })
-
-// }
+}
 
 export default {
   data() {
     return {
-      value: 'data'
+      showMethod: 'data',
+      columns,
+      dataSource
     }
   },
 
@@ -109,6 +122,7 @@ export default {
   methods: {
     // 单选框
     onChange(e) {
+
       console.log('radio checked', e.target.value)
     },
     // 分组
@@ -119,7 +133,8 @@ export default {
 
   components: {
     CardList,
-    PageView
+    PageView,
+    TableShow
   }
 }
 </script>
@@ -132,12 +147,18 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 100px;
+
+    .card-avatar{
+      width: 70px;
+      height: 70px;
+    }
     .meta-content {
       margin: 0;
       p {
         padding: 0;
         margin: 0;
-        margin-top: 4px;
+        margin-top: 8px;
         white-space: nowrap;
       }
     }

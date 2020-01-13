@@ -9,9 +9,9 @@
           <a-select-option value="Yiminghe">yiminghe</a-select-option>
         </a-select>
       </template>
-      <template slot="extra">
+      <!-- <template slot="extra">
         <a-pagination :defaultCurrent="1" :total="500" />
-      </template>
+      </template> -->
     </PageView>
 
     <el-amap vid="amapDemo" :zoom="zoom" :plugin="plugin" :center="center" class="map">
@@ -125,7 +125,7 @@ export default {
   text-align: center;
   margin:-24px -24px;
   width:auto;
-  height: 720px;
+  height: 717px;
   /deep/ .window-text div {
     border-radius: 4px;
   }

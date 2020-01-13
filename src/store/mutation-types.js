@@ -17,3 +17,5 @@ export const CONTENT_WIDTH_TYPE = {
 
 export const UPDATE_PROJECT_ID = 'UPDATE_PROJECT_ID'
 
+// ----------------------------
+export const GET_PROJECT_LIST = 'GET_PROJECT_LIST'

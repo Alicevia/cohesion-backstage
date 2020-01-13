@@ -11,7 +11,7 @@
         <a-pagination :defaultCurrent="1" :total="500" />
       </template>
     </PageView>
-    <CardList>
+    <CardList :dataSource="dataSource">
       <a-list-item slot="renderItem" slot-scope="{item}">
         <template>
           <a-card :hoverable="true" :title="item.title" size="small" class="card">
@@ -24,7 +24,7 @@
             </a-card-meta>
             <template class="ant-card-actions" slot="actions">
               <!-- <a>操作一</a>
-              <a>操作二</a> -->
+              <a>操作二</a>-->
             </template>
             <span slot="extra" style="fontSize:18px" class="extra iconfont">&#xe710;</span>
             <span slot="extra" style="fontSize:17px;margin:0 5px" class="extra iconfont">&#xe64c;</span>
@@ -43,26 +43,51 @@ import CardList from 'views/list/CardList'
 import PageView from '@/layouts/PageView'
 import CrudProjectDialog from './crudProjectDialog'
 import { mapActions } from 'vuex'
+import {reqProjectEquip} from '@/api/equipment'
+let dataSource = []
+for (let i = 0; i < 16; i++) {
+  dataSource.push({
+    id: i,
+    sort: i,
+    name: '张三' + i,
+    type: 1,
+    value: i + 10,
+    group: '分组',
+    warning: '否',
+    number: 1000 + i,
+    time: 2019
+  })
+}
 export default {
   data() {
     return {
-      title: '新增项目'
+      title: '新增项目',
+      dataSource
     }
   },
 
   computed: {},
-
-  mounted() {},
+  created(){
+    // console.log(this)
+  },
+  mounted() {
+    this.getProjectList()
+    
+  },
 
   methods: {
-    ...mapActions(['updateProjectId']),
+    ...mapActions(['updateProjectId','getProjectList']),
+    // ...mapActions({
+
+    // }),
     toggleCurdProjectDialog() {
       this.title = '新增项目'
       this.$refs['curdProject'].showModal()
     },
-    goToProject(id){
+    goToProject(id) {
+      console.log(id)
       this.updateProjectId(id)
-      this.$router.push({path:'/monitor/data'})
+      this.$router.push({ path: '/monitor/data' })
     }
   },
 
@@ -82,15 +107,19 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .meta-content{
+    height: 100px;
+
+    .card-avatar{
+      width: 70px;
+      height: 70px;
+    }
+    .meta-content {
       margin: 0;
       p {
         padding: 0;
         margin: 0;
-        margin-top: 4px;
+        margin-top: 8px;
         white-space: nowrap;
-
-
       }
     }
   }
@@ -102,9 +131,8 @@ export default {
 }
 /deep/.ant-card-body {
   background-color: #fff;
-  border-radius:  0 0 15px 15px;
+  border-radius: 0 0 15px 15px;
   overflow: hidden;
-
 }
 .extra {
   font-weight: bold;

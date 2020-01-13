@@ -12,13 +12,20 @@ import permission from './modules/permission'
 import getters from './getters'
 import * as TYPES from './mutation-types'
 
+
+import monitor from './myModules/monitor'
+import project from './myModules/project'
+
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
     app,
     user,
-    permission
+    permission,
+
+    monitor,project
   },
   state: {
     projectId:''
@@ -34,7 +41,6 @@ export default new Vuex.Store({
       Vue.ls.set('projectId',id)
       commit(TYPES.UPDATE_PROJECT_ID,id)
     }
-
   },
   getters
 })
