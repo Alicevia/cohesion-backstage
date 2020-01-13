@@ -51,35 +51,32 @@
         </a-tab-pane>
         <a-tab-pane key="tab2" tab="微信登陆">
           <div>
-            <img class="qrcode" src="~@/assets/images/wechat.png" alt="">
+            <img class="qrcode" src="~@/assets/images/wechat.png" alt />
           </div>
         </a-tab-pane>
       </a-tabs>
 
       <template v-if="!(customActiveKey==='tab2')">
+        <a-form-item>
+          <!-- <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox> -->
+          <router-link :to="{ name: 'recover', params: { user: 'aaa'} }" class="forge-password">忘记密码</router-link>
+          <router-link style="float: right;" class="register" :to="{ name: 'register' }">注册账户</router-link>
+        </a-form-item>
 
-      <a-form-item>
-        <!-- <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox> -->
-        <router-link :to="{ name: 'recover', params: { user: 'aaa'} }"
-          class="forge-password">忘记密码</router-link>
-        <router-link  style="float: right;" class="register" :to="{ name: 'register' }">注册账户</router-link>
-
-      </a-form-item>
-
-      <a-form-item style="margin-top:24px">
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="login-button"
-          :loading="state.loginBtn"
-          :disabled="state.loginBtn"
-        >确定</a-button>
-      </a-form-item>
+        <a-form-item style="margin-top:24px">
+          <a-button
+            size="large"
+            type="primary"
+            htmlType="submit"
+            class="login-button"
+            :loading="state.loginBtn"
+            :disabled="state.loginBtn"
+          >确定</a-button>
+        </a-form-item>
       </template>
 
       <!-- <div class="user-login-other">
-      </div> -->
+      </div>-->
     </a-form>
 
     <two-step-captcha
@@ -92,7 +89,6 @@
 </template>
 
 <script>
-
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
@@ -148,15 +144,63 @@ export default {
         Login
       } = this
       state.loginBtn = true
-      validateFields((err, values) => {
+      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-
-    
-         
-        } 
+          console.log('login form', values)
+          const loginParams = { ...values }
+          delete loginParams.username
+          loginParams[!state.loginType ? 'email' : 'username'] = values.username
+          loginParams.password = md5(values.password)
+          Login(loginParams)
+            .then(res => this.loginSuccess(res))
+            .catch(err => this.requestFailed(err))
+            .finally(() => {
+              state.loginBtn = false
+            })
+        } else {
+          setTimeout(() => {
+            state.loginBtn = false
+          }, 600)
+        }
       })
     },
-
+    getCaptcha(e) {
+      e.preventDefault()
+      const {
+        form: { validateFields },
+        state
+      } = this
+      validateFields(['mobile'], { force: true }, (err, values) => {
+        if (!err) {
+          state.smsSendBtn = true
+          const interval = window.setInterval(() => {
+            if (state.time-- <= 0) {
+              state.time = 60
+              state.smsSendBtn = false
+              window.clearInterval(interval)
+            }
+          }, 1000)
+          const hide = this.$message.loading('验证码发送中..', 0)
+          getSmsCaptcha({ mobile: values.mobile })
+            .then(res => {
+              setTimeout(hide, 2500)
+              this.$notification['success']({
+                message: '提示',
+                description: '验证码获取成功，您的验证码为：' + res.result.captcha,
+                duration: 8
+              })
+            })
+            .catch(err => {
+              setTimeout(hide, 1)
+              clearInterval(interval)
+              state.time = 60
+              state.smsSendBtn = false
+              this.requestFailed(err)
+            })
+        }
+      })
+    },
 
     stepCaptchaCancel() {
       this.Logout().then(() => {
@@ -204,7 +248,7 @@ export default {
   width: 430px !important;
   .qrcode {
     width: 100%;
-    background-size: contain
+    background-size: contain;
   }
 }
 .user-layout-login {
