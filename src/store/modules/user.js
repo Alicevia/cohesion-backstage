@@ -35,18 +35,21 @@ const user = {
   actions: {
     // 登录
     Login ({ commit }, userInfo) {
-      console.log(userInfo)
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-
-          const result = response.result
-          console.log(result)
-          Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-          commit('SET_TOKEN', result.token)
-          resolve()
+          let {data} = response
+          if (data.succeed) {
+            let userToken = response.headers['user-token']
+            Vue.ls.set(ACCESS_TOKEN, userToken, 7 * 24 * 60 * 60 * 1000)
+            commit('SET_TOKEN',userToken)
+            resolve()
+          }else{
+            reject(data.message)
+          }
         }).catch(error => {
           reject(error)
         })
+        
       })
     },
 
@@ -82,16 +85,19 @@ const user = {
     },
 
     // 登出
-    Logout ({ commit, state }) {
-      return new Promise((resolve) => {
-        logout(state.token).then(() => {
-          resolve()
-        }).catch(() => {
-          resolve()
-        }).finally(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          Vue.ls.remove(ACCESS_TOKEN)
+    Logout ({ commit}) {
+      return new Promise((resolve,reject) => {
+        logout().then((response) => {
+          let {data} = response
+          if (data.succeed) {
+            Vue.ls.remove(ACCESS_TOKEN)
+            commit('SET_TOKEN', '')
+            resolve()
+          }else{
+            Vue.ls.remove(ACCESS_TOKEN)
+            commit('SET_TOKEN', '')
+            reject()
+          }
         })
       })
     }

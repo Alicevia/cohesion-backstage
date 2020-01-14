@@ -1,6 +1,6 @@
 <template>
   <div id="userLayout" :class="['user-layout-wrapper', device]">
-    <div class="container" style="paddingTop:150px">
+    <div class="container" style="paddingTop:120px">
       <div class="top">
         <div class="header">
           <a href="javascript:;">
@@ -21,9 +21,9 @@
           <a href="_self">隐私</a>
           <a href="_self">条款</a>
         </div> -->
-        <div class="copyright">
+        <!-- <div class="copyright">
           Copyright &copy; 2019 Alicevia
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -99,7 +99,7 @@ export default {
           }
 
           .title {
-            font-size: 33px;
+            font-size: 28px;
             color: #009ec5;
             font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
             font-weight: 510;

@@ -12,6 +12,7 @@ import { axios } from '@/utils/request'
  * @param parameter
  * @returns {*}
  */
+// 登录
 export function login (data) {
   console.log(data)
   return axios({
@@ -20,6 +21,43 @@ export function login (data) {
     data
   })
 }
+// 获取二维码 传递回跳链接
+export const reqWeChatQRCode=(data)=>{
+  // let key = data.trueUrl
+  // encodeURIComponent(data.trueUrl)
+  return axios({
+  url:`register/wechaturl?trueUrl=${encodeURIComponent(data.trueUrl)}`,
+  method:'put'
+})}
+// 微信登录
+export const reqWeChatLogin = (data)=>axios({
+  url:'register/wxlogin',
+  method:'post',
+  data
+})
+//申请验证码
+export const reqResetAuthCode=(data)=>axios({
+  url:'register/phoneVerificationPwd',
+  params:data,
+  method:'get'
+})
+// 验证输入的短信code是否正确
+export const reqCheckSMS = (data)=>axios({
+  url:'register/password/forget/sms',
+  params:data,
+  method:'put'
+})
+//完成重置密码
+export const reqResetPW=(data)=>axios({
+  url:'register/password/forget',
+  data,
+  method:'put',
+})
+
+
+
+
+
 
 export function getSmsCaptcha (parameter) {
   return axios({
@@ -48,11 +86,8 @@ export function getCurrentUserNav (token) {
 
 export function logout () {
   return axios({
-    url: '/auth/logout',
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
+    url: 'register/logout',
+    method: 'get',
   })
 }
 

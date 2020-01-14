@@ -12,7 +12,7 @@
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
-        <a-tab-pane key="tab1" tab="账号密码登录">
+        <a-tab-pane key="tab1" tab="账号登录">
           <a-alert
             v-if="isLoginError"
             type="error"
@@ -48,93 +48,192 @@
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
+          <a-form-item>
+            <a-button
+              size="large"
+              type="primary"
+              htmlType="submit"
+              class="login-button"
+              :loading="state.loginBtn"
+              :disabled="state.loginBtn"
+            >确定</a-button>
+          </a-form-item>
         </a-tab-pane>
         <a-tab-pane key="tab2" tab="微信登陆">
-          <div>
+          <div class="qrcode" id="qrcode" style="textAlign:center"></div>
+          <!-- <div>
             <img class="qrcode" src="~@/assets/images/wechat.png" alt />
-          </div>
+          </div>-->
+        </a-tab-pane>
+        <a-tab-pane key="tab3" tab="忘记密码">
+          <template v-if="flow===1">
+            <a-form-item>
+              <a-input
+                size="large"
+                type="text"
+                placeholder="请输入手机号"
+                v-decorator="[
+                'mobile',
+                {rules: [{ required: true, len:11, message: '请输入11位手机号' }], validateTrigger: 'change'}
+              ]"
+              >
+                <a-icon slot="prefix" type="phone" :style="{ color: 'rgba(0,0,0,.25)' }" />
+              </a-input>
+            </a-form-item>
+            <a-row :gutter="16">
+              <a-col class="gutter-row" :span="16">
+                <a-form-item>
+                  <a-input
+                    size="large"
+                    type="text"
+                    placeholder="验证码"
+                    v-decorator="['captcha', {rules: [{ required: true, len:6, message: '请输入6位验证码' }], validateTrigger: 'blur'}]"
+                  >
+                    <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
+                  </a-input>
+                </a-form-item>
+              </a-col>
+              <a-col class="gutter-row" :span="8">
+                <a-button
+                  class="getCaptcha"
+                  size="large"
+                  :disabled="state.smsSendBtn"
+                  @click.stop.prevent="getCaptcha"
+                  v-text="!state.smsSendBtn && '获取验证码'||(state.time+' s')"
+                ></a-button>
+              </a-col>
+            </a-row>
+            <a-form-item>
+              <a-button
+                size="large"
+                type="primary"
+                htmlType="submit"
+                class="login-button"
+                @click="checkSMS"
+              >下一步</a-button>
+            </a-form-item>
+          </template>
+          <template v-else>
+            <a-form-item>
+              <a-input
+                size="large"
+                type="text"
+                placeholder="请输入手机号"
+                v-decorator="[
+                'phoneReset',
+                {rules: [{ required: true, len:11, message: '请输入11位手机号' }],
+                  initialValue:recordPhone,
+                 validateTrigger: 'change'}
+              ]"
+              >
+                <a-icon slot="prefix" type="phone" :style="{ color: 'rgba(0,0,0,.25)' }" />
+              </a-input>
+            </a-form-item>
+            <a-form-item>
+              <a-input
+                size="large"
+                type="password"
+                autocomplete="false"
+                placeholder="请输入密码"
+                v-decorator="[
+                'passwordReset',
+                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+              ]"
+              >
+                <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
+              </a-input>
+            </a-form-item>
+            <a-form-item>
+              <a-button
+                size="large"
+                type="primary"
+                htmlType="submit"
+                class="login-button"
+                @click="resetPW"
+              >完成</a-button>
+            </a-form-item>
+          </template>
         </a-tab-pane>
       </a-tabs>
-
-      <template v-if="!(customActiveKey==='tab2')">
-        <a-form-item>
-          <!-- <a-checkbox v-decorator="['rememberMe']">自动登录</a-checkbox> -->
-          <router-link :to="{ name: 'recover', params: { user: 'aaa'} }" class="forge-password">忘记密码</router-link>
-          <router-link style="float: right;" class="register" :to="{ name: 'register' }">注册账户</router-link>
-        </a-form-item>
-
-        <a-form-item style="margin-top:24px">
-          <a-button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            class="login-button"
-            :loading="state.loginBtn"
-            :disabled="state.loginBtn"
-          >确定</a-button>
-        </a-form-item>
-      </template>
-
-      <!-- <div class="user-login-other">
-      </div>-->
     </a-form>
-
-    <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
   </div>
 </template>
 
 <script>
-import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
+import { reqWeChatQRCode, reqResetAuthCode,reqCheckSMS,reqResetPW } from '@/api/login'
 
 export default {
-  components: {
-    TwoStepCaptcha
-  },
+  components: {},
   data() {
     return {
-      customActiveKey: 'tab1',
+      recordPhone:'',
+      flow: 1,
+      customActiveKey: 'tab3',
       loginBtn: false,
       // login type: 0 email, 1 username, 2 telephone
       loginType: 0,
       isLoginError: false,
-      requiredTwoStepCaptcha: false,
-      stepCaptchaVisible: false,
       form: this.$form.createForm(this),
       state: {
         time: 60,
         loginBtn: false,
-        // login type: 0 email, 1 username, 2 telephone
-        loginType: 0,
-        smsSendBtn: false
+        smsSendBtn: false,
+        progressColor: '#FF0000'
       }
     }
   },
-  created() {
-    get2step({})
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
-    // this.requiredTwoStepCaptcha = true
-  },
+  created() {},
   methods: {
-    ...mapActions(['Login', 'Logout']),
-    // handler
+    ...mapActions(['Login']),
 
+    // 切换登录窗口
     handleTabClick(key) {
       this.customActiveKey = key
+      if (this.customActiveKey === 'tab2') {
+        this.getWeChatQRCode()
+      }
       // this.form.resetFields()
     },
+    // 点击获取验证码
+
+    // 获取二维码
+    async getWeChatQRCode() {
+      let origin = window.location.origin
+      let pathname = window.location.pathname
+      let href = origin + pathname
+      console.log(href)
+      let result = await reqWeChatQRCode({ trueUrl: href })
+      console.log(result)
+      if (result.data.code === 0) {
+        let { appid, login, redirect_uri } = result.data.data
+        new WxLogin({
+          id: 'qrcode',
+          appid,
+          scope: 'snsapi_login',
+          redirect_uri: encodeURIComponent(redirect_uri),
+          state: Math.ceil(Math.random() * 1000),
+          self_redirect: false,
+          style: 'black',
+          href:
+            'data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDI1MHB4O30NCi5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9DQouaW1wb3dlckJveCAuaW5mbyB7ZGlzcGxheTogbm9uZTt9DQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9DQouaW1wb3dlckJveCAuc3RhdHVzIHt0ZXh0LWFsaWduOiBjZW50ZXI7fQ=='
+        })
+        let iframe = document.querySelector('#qrcode>iframe')
+        iframe.sandbox = 'allow-scripts allow-top-navigation allow-same-origin'
+      } else {
+        this.$notification['error']({
+          message: '错误',
+          description: '微信二维码获取失败,请刷新页面',
+          duration: 4
+        })
+      }
+      //  iframe.sandbox = 'allow-top-navigation'
+      // iframe.security='restrict'
+      // iframe.sandbox = ''
+      // http://192.168.50.236:8000/user/login?openid=oBUh059mnb-GkVYeGmJNouSQOBAo&accessToken=29_tglUAxMF2vGd1gGpTa5LfnDKV5GVIBMjo_t9RcXdrnr_HVNP9g7lzfXhnD0XIrZ8uTMHv06UdG2cL5H1cbLoRAt7zfR0UAWJR7goJu0l6MA
+    },
+    // 密码登录
     handleSubmit(e) {
       e.preventDefault()
       const {
@@ -144,14 +243,10 @@ export default {
         Login
       } = this
       state.loginBtn = true
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+      validateFields(['password','phone'],(err, values) => {
         if (!err) {
           console.log('login form', values)
           const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
           Login(loginParams)
             .then(res => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
@@ -159,17 +254,21 @@ export default {
               state.loginBtn = false
             })
         } else {
-          setTimeout(() => {
+          let timer = setTimeout(() => {
+            clearTimeout(timer)
             state.loginBtn = false
           }, 600)
         }
       })
     },
+    // 获取短信验证码
     getCaptcha(e) {
       e.preventDefault()
       const {
         form: { validateFields },
-        state
+        state,
+        $message,
+        $notification
       } = this
       validateFields(['mobile'], { force: true }, (err, values) => {
         if (!err) {
@@ -181,14 +280,14 @@ export default {
               window.clearInterval(interval)
             }
           }, 1000)
-          const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile })
+          const hide = $message.loading('验证码发送中..', 0)
+          reqResetAuthCode({ phone: values.mobile })
             .then(res => {
               setTimeout(hide, 2500)
-              this.$notification['success']({
+              $notification['success']({
                 message: '提示',
-                description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-                duration: 8
+                description: '验证码获取成功，请查看手机',
+                duration: 3
               })
             })
             .catch(err => {
@@ -201,29 +300,66 @@ export default {
         }
       })
     },
-
-    stepCaptchaCancel() {
-      this.Logout().then(() => {
-        this.loginBtn = false
-        this.stepCaptchaVisible = false
+    // 验证验证码是否正确
+    checkSMS(e) {
+      e.preventDefault()
+      const {
+        form: { validateFields },
+        state,
+        customActiveKey,
+        Login
+      } = this
+      validateFields(['mobile', 'captcha'], async (err, values) => {
+        if (!err) {
+          this.recordPhone = values.mobile//记录用户输入的手机号
+          let {data} = await reqCheckSMS({phone:values.mobile,code:values.captcha})
+          if(data.succeed){
+            this.$notification['success']({
+              message: '验证通过',
+              description:'请输入新密码',
+              duration: 4
+            })
+            this.flow = 2
+          }else{
+             this.$notification['error']({
+              message: data.message,
+              duration: 4
+            })
+          }  
+     
+        }
       })
     },
-    loginSuccess(res) {
-      console.log(res)
-      // check res.homePage define, set $router.push name res.homePage
-      // Why not enter onComplete
-      /*
-      this.$router.push({ name: 'analysis' }, () => {
-        console.log('onComplete')
-        this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
-        })
+    // 重置密码
+    resetPW(e){
+      e.preventDefault()
+      this.form.validateFields(['phoneReset', 'passwordReset'], async (err, values) => {
+        if (!err) {
+          let {data} = await reqResetPW({phone:values.phoneReset,password:values.passwordReset})
+          if(data.succeed){
+            this.$notification['success']({
+              message: '密码重置成功',
+              description:'请输入新密码',
+              duration: 4
+            })
+            this.flow = 1
+          }else {
+             this.$notification['error']({
+              message: '密码重置失败',
+              description:'网络或者服务器错误，请稍后再试',
+              duration: 4
+            })
+          }  
+        }
       })
-      */
+
+    },
+    // 登录成功的处理
+    loginSuccess() {
       this.$router.push({ path: '/' })
       // 延迟 1 秒显示欢迎信息
-      setTimeout(() => {
+      let timer = setTimeout(() => {
+        clearTimeout(timer)
         this.$notification.success({
           message: '欢迎',
           description: `${timeFix()}，欢迎回来`
@@ -231,11 +367,12 @@ export default {
       }, 1000)
       this.isLoginError = false
     },
+    // 登录失败的处理
     requestFailed(err) {
       this.isLoginError = true
       this.$notification['error']({
         message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        description: err || '请求出错，服务器或者网络出现问题',
         duration: 4
       })
     }
@@ -246,8 +383,9 @@ export default {
 <style lang="less" scoped>
 .main {
   width: 430px !important;
-  .qrcode {
+  #qrcode {
     width: 100%;
+    height: 300px;
     background-size: contain;
   }
 }

@@ -34,7 +34,7 @@
         <router-link tag="li" to="/account" @click.native="clearProjectId">
          <span class="iconfont">&#xe643;</span>
           <p>账户</p></router-link>
-        <li>
+        <li @click="logout">
           <span class="iconfont">&#xe60c;</span>
           <p>退出</p>
         </li>
@@ -58,10 +58,29 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(['updateProjectId']),
+    ...mapActions(['updateProjectId','Logout']),
     clearProjectId(){
       // this.updateProjectId('')
+    },
+    // 处理退出
+    logout(){
+      this.Logout().then(()=>{
+        this.$notification.success({
+          message: '操作成功',
+          description: `您已经退出登录`
+        })
+        this.$router.replace({path:'/user/login'})
+        // location.href=location.origin+location.pathname
+
+      }).catch(()=>{
+        this.$notification.error({
+          message: '用户信息已过期',
+          description: `您已经退出登录`
+        })
+         this.$router.replace({path:'/user/login'})
+      })
     }
+
   },
 
   components: {}
