@@ -1,5 +1,5 @@
 <template>
-  <a-locale-provider :locale="locale">
+  <a-locale-provider>
     <div id="app">
       <router-view />
     </div>
@@ -13,6 +13,7 @@ import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import { AppDeviceEnquire } from '@/utils/mixin'
 import qs from 'qs'
 import { reqWeChatLogin } from '@/api/login'
+import { mapState } from 'vuex'
 export default {
   mixins: [AppDeviceEnquire],
   data() {
@@ -21,9 +22,17 @@ export default {
     }
   },
   created() {
-    this.handleWeChatLogin()
+    let {search} =location
+    if (search) {
+      this.handleWeChatLogin()
+    }
   },
   mounted() {
+  },
+  computed:{
+    ...mapState({
+      token:state=>state.user.token
+    })
   },
   methods: {
     async handleWeChatLogin() {
@@ -36,8 +45,10 @@ export default {
         let userToken = headers['user-token']
         Vue.ls.set(ACCESS_TOKEN, userToken, 7 * 24 * 60 * 60 * 1000)
         this.$store.commit('SET_TOKEN', userToken)
+        
       }
-    }
+    },
+    
   }
 }
 </script>

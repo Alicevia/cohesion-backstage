@@ -11,7 +11,9 @@ Router.prototype.push = function push (location, onResolve, onReject) {
 
 Vue.use(Router)
 
-export default new Router({
+
+
+let router =  new Router({
   mode: 'hash',
   linkActiveClass: 'active',
   base: process.env.BASE_URL,
@@ -19,3 +21,19 @@ export default new Router({
   routes:constantRouterMap.concat(asyncRouterMap)
   // routes: constantRouterMap//先传入的是基本路由 后期通过addRoutes添加新路由
 })
+
+// router.beforeEach((to, from, next) => {
+//   let isLogin = store.state.login
+//   if (to.matched[0].meta.check) {
+//     if (isLogin) {
+//       next()
+//     } else {
+//       router.push({ path: '/login' })
+//     }
+//   } else {
+//     next()
+//   }
+// })
+
+
+export default router

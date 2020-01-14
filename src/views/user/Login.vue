@@ -8,8 +8,9 @@
       @submit="handleSubmit"
     >
       <a-tabs
+      size='large'
         :activeKey="customActiveKey"
-        :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
+        :tabBarStyle="{ textAlign: 'center',borderBottom: 'unset' }"
         @change="handleTabClick"
       >
         <a-tab-pane key="tab1" tab="账号登录">
@@ -30,7 +31,7 @@
                 {rules: [{ required: true, len:11, message: '请输入11位手机号' }], validateTrigger: 'change'}
               ]"
             >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
+              <a-icon slot="prefix" type="phone" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
 
@@ -42,7 +43,7 @@
               placeholder="请输入密码"
               v-decorator="[
                 'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+                {rules: [{ required: true,min:6, message: '密码不少于6位' }], validateTrigger: 'blur'}
               ]"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -137,7 +138,7 @@
                 placeholder="请输入密码"
                 v-decorator="[
                 'passwordReset',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+                {rules: [{ required: true,min:6, message: '密码不少于6位' }], validateTrigger: 'blur'}
               ]"
               >
                 <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -170,9 +171,8 @@ export default {
     return {
       recordPhone:'',
       flow: 1,
-      customActiveKey: 'tab3',
+      customActiveKey: 'tab1',
       loginBtn: false,
-      // login type: 0 email, 1 username, 2 telephone
       loginType: 0,
       isLoginError: false,
       form: this.$form.createForm(this),
@@ -203,9 +203,7 @@ export default {
       let origin = window.location.origin
       let pathname = window.location.pathname
       let href = origin + pathname
-      console.log(href)
       let result = await reqWeChatQRCode({ trueUrl: href })
-      console.log(result)
       if (result.data.code === 0) {
         let { appid, login, redirect_uri } = result.data.data
         new WxLogin({
@@ -217,7 +215,7 @@ export default {
           self_redirect: false,
           style: 'black',
           href:
-            'data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDI1MHB4O30NCi5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9DQouaW1wb3dlckJveCAuaW5mbyB7ZGlzcGxheTogbm9uZTt9DQouc3RhdHVzX2ljb24ge2Rpc3BsYXk6IG5vbmV9DQouaW1wb3dlckJveCAuc3RhdHVzIHt0ZXh0LWFsaWduOiBjZW50ZXI7fQ=='
+            'data:text/css;base64,LmltcG93ZXJCb3ggLnFyY29kZSB7d2lkdGg6IDI1MHB4O30NCi5pbXBvd2VyQm94IC50aXRsZSB7ZGlzcGxheTogbm9uZTt9DQouaW1wb3dlckJveCAuaW5mbyB7d2lkdGg6IDIwMHB4O30NCi5zdGF0dXNfaWNvbiB7ZGlzcGxheTogbm9uZX0NCi5pbXBvd2VyQm94IC5zdGF0dXMge3RleHQtYWxpZ246IGNlbnRlcjt9'
         })
         let iframe = document.querySelector('#qrcode>iframe')
         iframe.sandbox = 'allow-scripts allow-top-navigation allow-same-origin'
@@ -339,10 +337,11 @@ export default {
           if(data.succeed){
             this.$notification['success']({
               message: '密码重置成功',
-              description:'请输入新密码',
+              description:'请重新登录',
               duration: 4
             })
             this.flow = 1
+            this.customActiveKey = 'tab1'
           }else {
              this.$notification['error']({
               message: '密码重置失败',

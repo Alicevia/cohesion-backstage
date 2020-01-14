@@ -9,8 +9,8 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 const service = axios.create({
   // baseURL: process.env.VUE_APP_API_BASE_URL, // api base_url
   // baseURL:'http://192.168.50.163:8081/',
-  baseURL:'http://192.168.50.144:8888/monitor-pc-api/',
-  // baseURL:'https://www.cluster-dt.com/pcwechat/',
+  // baseURL:'http://192.168.50.144:8888/monitor-pc-api/',
+  baseURL:'https://www.cluster-dt.com/pcwechat/',
   timeout: 10000 // 请求超时时间
 })
 

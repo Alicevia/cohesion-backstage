@@ -1,7 +1,7 @@
 <template>
   <a-layout :class="['layout', device]">
     <!-- SideMenu -->
-    <a-drawer
+    <!-- <a-drawer
       v-if="isMobile()"
       placement="left"
       :wrapClassName="`drawer-sider ${navTheme}`"
@@ -17,14 +17,14 @@
         :collapsible="true"
         @menuSelect="menuSelect"
       ></side-menu>
-    </a-drawer>
+    </a-drawer> -->
 
     <side-menu
-      v-else-if="isSideMenu()"
+
       mode="inline"
       :menus="menus"
       :theme="navTheme"
-      :collapsed="collapsed"
+      :collapsed="false"
       :collapsible="true"
     ></side-menu>
 
@@ -142,15 +142,6 @@ export default {
     next()
   },
   mounted() {
-    // if (window.history && window.history.pushState) {
-    //   // 向历史记录中插入了当前页
-    //   history.pushState(null, null, document.URL);
-    //   window.addEventListener('popstate', ()=>{this.goBack=true}, false);
-    // }
-    // Bus.$on('changeMargin',data=>{
-    //   this.marginValue = data
-    // })
-
     const userAgent = navigator.userAgent
     if (userAgent.indexOf('Edge') > -1) {
       this.$nextTick(() => {
