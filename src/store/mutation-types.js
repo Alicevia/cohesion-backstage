@@ -15,7 +15,12 @@ export const CONTENT_WIDTH_TYPE = {
   Fixed: 'Fixed'
 }
 
+
+
 export const UPDATE_PROJECT_ID = 'UPDATE_PROJECT_ID'
 
-// ----------------------------
+// ----------------------------project
 export const GET_PROJECT_LIST = 'GET_PROJECT_LIST'
+
+// -----------------------user
+export const GET_USER_INFO = 'GET_USER_INFO'

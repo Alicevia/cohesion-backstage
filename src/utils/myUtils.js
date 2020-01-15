@@ -106,6 +106,9 @@ let utils = function (params) {
         case -6:
           message.error('手机号已经注册，请更换手机')
           break;
+        case -35:
+          message.error(data.message)
+          break;
         default:
           message.error(e)
           break;

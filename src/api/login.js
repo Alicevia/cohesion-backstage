@@ -14,7 +14,6 @@ import { axios } from '@/utils/request'
  */
 // 登录
 export function login (data) {
-  console.log(data)
   return axios({
     url: 'register/login',
     method: 'post',
@@ -23,8 +22,6 @@ export function login (data) {
 }
 // 获取二维码 传递回跳链接
 export const reqWeChatQRCode=(data)=>{
-  // let key = data.trueUrl
-  // encodeURIComponent(data.trueUrl)
   return axios({
   url:`register/wechaturl?trueUrl=${encodeURIComponent(data.trueUrl)}`,
   method:'put'
@@ -59,6 +56,22 @@ export const reqResetPW=(data)=>axios({
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export function getSmsCaptcha (parameter) {
   return axios({
     url: api.SendSms,
@@ -67,15 +80,7 @@ export function getSmsCaptcha (parameter) {
   })
 }
 
-export function getInfo () {
-  return axios({
-    url: '/user/info',
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
-}
+
 
 export function getCurrentUserNav (token) {
   return axios({

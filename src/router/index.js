@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store'
 import { constantRouterMap,asyncRouterMap } from '@/config/router.config'
+import notification from 'ant-design-vue/es/notification'
 
 // hack router push callback
 const originalPush = Router.prototype.push
@@ -22,18 +24,23 @@ let router =  new Router({
   // routes: constantRouterMap//先传入的是基本路由 后期通过addRoutes添加新路由
 })
 
-// router.beforeEach((to, from, next) => {
-//   let isLogin = store.state.login
-//   if (to.matched[0].meta.check) {
-//     if (isLogin) {
-//       next()
-//     } else {
-//       router.push({ path: '/login' })
-//     }
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  let token = store.state.user.token
+  if (to.matched[0].path.includes('/user')) {
+    next()
+  }else{
+    if (token) {
+      next()
+    }else{
+      notification.error({
+        message: '您还未登录',
+        description: '请登录'
+      })
+      next({path:'/user'})
+    }
+  }
+  
+})
 
 
 export default router

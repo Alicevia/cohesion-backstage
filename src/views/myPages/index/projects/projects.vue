@@ -2,38 +2,54 @@
   <div>
     <PageView :title="false">
       <template #headerContent>
-        <span style="fontSize:16px;marginRight:30px">项目数量：99</span>
-        <a-input style="width:200px;margin:0 10px" placeholder="请输入项目名称" />
-        <a-button style="margin:0 10px 0 0">查询</a-button>
-        <a-button type="primary" @click="toggleCurdProjectDialog">新增项目</a-button>
+        <span style="fontSize:16px;marginRight:30px">项目数量：{{projectList.total}}</span>
+        <a-input v-model="search" style="width:200px;margin:0 10px" placeholder="请输入项目名称" />
+        <a-button @click="searchProject" style="margin:0 10px 0 0">查询</a-button>
+        <a-button type="primary" @click="addProject">新增项目</a-button>
       </template>
       <template slot="extra">
-        <a-pagination :defaultCurrent="1" :total="500" />
+        <a-pagination :defaultCurrent="1" :defaultPageSize='size' @change="changePage" :total="projectList.total" />
       </template>
     </PageView>
-    <CardList :dataSource="dataSource">
+    <CardList :dataSource="projectList.list">
       <a-list-item slot="renderItem" slot-scope="{item}">
         <template>
-          <a-card :hoverable="true" :title="item.title" size="small" class="card">
+          <a-card :hoverable="true" :title="item.name" size="small" class="card">
             <a-card-meta class="card-body" @click="goToProject(item.id)">
-              <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large" />
+              <a-avatar class="card-avatar" slot="avatar" :src="item.projectImg" size="large" />
               <div class="meta-content" slot="description">
-                <p>正常设备：{{item.normal}}</p>
-                <p>报警设备：{{item.unnormal}}</p>
+                <p>正常设备：{{item.normalEquipment}}</p>
+                <p>报警设备：{{item.warningEquipment}}</p>
               </div>
             </a-card-meta>
             <template class="ant-card-actions" slot="actions">
               <!-- <a>操作一</a>
               <a>操作二</a>-->
             </template>
-            <span slot="extra" style="fontSize:18px" class="extra iconfont">&#xe710;</span>
+            <span
+              slot="extra"
+              @click="modiProject(item)"
+              style="fontSize:18px"
+              class="extra iconfont"
+            >&#xe710;</span>
             <span slot="extra" style="fontSize:17px;margin:0 5px" class="extra iconfont">&#xe64c;</span>
-            <span slot="extra" style="fontSize:15px" class="extra iconfont">&#xe62f;</span>
+            <span
+              slot="extra"
+              @click="deleteProject(item.id)"
+              style="fontSize:15px"
+              class="extra iconfont"
+            >&#xe62f;</span>
           </a-card>
         </template>
       </a-list-item>
     </CardList>
-    <CrudProjectDialog :title="title" ref="curdProject"></CrudProjectDialog>
+    <CrudProjectDialog
+      :title="title"
+      :page="page"
+      @clearProject="clearProject"
+      :project="project"
+      ref="curdProject"
+    ></CrudProjectDialog>
     <!-- <router-link :to="{path:'/monitor/data'}" @click.native="updateProjectId(1)">kk1k</router-link> -->
   </div>
 </template>
@@ -42,52 +58,86 @@
 import CardList from 'views/list/CardList'
 import PageView from '@/layouts/PageView'
 import CrudProjectDialog from './crudProjectDialog'
-import { mapActions } from 'vuex'
-import {reqProjectEquip} from '@/api/equipment'
-let dataSource = []
-for (let i = 0; i < 16; i++) {
-  dataSource.push({
-    id: i,
-    sort: i,
-    name: '张三' + i,
-    type: 1,
-    value: i + 10,
-    group: '分组',
-    warning: '否',
-    number: 1000 + i,
-    time: 2019
-  })
-}
+import { mapActions, mapState } from 'vuex'
+import { reqProjectEquip, reqDeleteProjectEquip, reqSearchProjectEquip } from '@/api/project'
+import utils from '../../../../utils/myUtils'
+
 export default {
   data() {
     return {
       title: '新增项目',
-      dataSource
+      project: {},
+      page: 0,
+      size:16,
+      search: ''
     }
   },
 
-  computed: {},
-  created(){
-    // console.log(this)
+  computed: {
+    ...mapState({
+      projectList: state => state.project.projectList
+    })
   },
+  created() {},
   mounted() {
-    this.getProjectList()
-    
+    this.getProjectList({ page: 0, size: 16 })
   },
 
   methods: {
-    ...mapActions(['updateProjectId','getProjectList']),
+    ...mapActions(['updateProjectId', 'getProjectList','getSearchProjectList']),
     // ...mapActions({
 
     // }),
-    toggleCurdProjectDialog() {
+    //
+    // 查询项目
+    searchProject() {
+      this.getSearchProjectList({page:0,size:16,projectName:this.search})
+    },
+    // 添加项目
+    addProject() {
       this.title = '新增项目'
       this.$refs['curdProject'].showModal()
     },
+    // 修改项目
+    modiProject(item) {
+      this.project = item
+      this.title = '修改项目'
+      this.$refs['curdProject'].showModal()
+    },
+    // 删除项目
+    async deleteProject(id) {
+      let { data } = await reqDeleteProjectEquip({projectId:id})
+      utils.detailBackCode(data, { s: '删除成功' })
+      this.getProjectList({ page: this.page, size: 16 })
+    },
+
+    // 存储项目id
     goToProject(id) {
-      console.log(id)
       this.updateProjectId(id)
       this.$router.push({ path: '/monitor/data' })
+    },
+    // 改变页码
+    changePage(page) {
+      page--
+      this.page = page
+      if (this.search.trim()) {
+        this.getProjectList({ page, size: 16 ,projectName:this.search})
+      }else{
+        this.getProjectList({ page, size: 16 })
+      }
+
+    },
+    // 清空传递的project
+    clearProject() {
+      this.project = {}
+    }
+  },
+  watch: {
+    search(newValue, oldValue) {
+      if (!newValue.trim()) {
+        this.getProjectList({ page: 0, size: 16 })
+      }
+      
     }
   },
 
@@ -109,7 +159,7 @@ export default {
     align-items: center;
     height: 100px;
 
-    .card-avatar{
+    .card-avatar {
       width: 70px;
       height: 70px;
     }

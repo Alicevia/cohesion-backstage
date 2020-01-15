@@ -1,8 +1,8 @@
 import Vue from 'vue'
-import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { welcome } from '@/utils/util'
-
+import { login, logout } from '@/api/login'
+import { ACCESS_TOKEN,GET_USER_INFO } from '@/store/mutation-types'
+import {reqUserInfo} from '@/api/user'
+import utils from '@/utils/myUtils'
 const user = {
   state: {
     token: '',
@@ -10,27 +10,12 @@ const user = {
     welcome: '',
     avatar: '',
     roles: [],
-    info: {}
+    info: {},
+
+    userInfo:{}
   },
 
-  mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
-    },
-    SET_NAME: (state, { name, welcome }) => {
-      state.name = name
-      state.welcome = welcome
-    },
-    SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
-    },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
-    },
-    SET_INFO: (state, info) => {
-      state.info = info
-    }
-  },
+ 
 
   actions: {
     // 登录
@@ -52,38 +37,6 @@ const user = {
         
       })
     },
-
-    // 获取用户信息
-    GetInfo ({ commit }) {
-      return new Promise((resolve, reject) => {
-        getInfo().then(response => {
-          const result = response.result
-
-          if (result.role && result.role.permissions.length > 0) {
-            const role = result.role
-            role.permissions = result.role.permissions
-            role.permissions.map(per => {
-              if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => { return action.action })
-                per.actionList = action
-              }
-            })
-            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
-            commit('SET_ROLES', result.role)
-            commit('SET_INFO', result)
-          } else {
-            reject(new Error('getInfo: roles must be a non-null array !'))
-          }
-
-          commit('SET_NAME', { name: result.name, welcome: welcome() })
-          commit('SET_AVATAR', result.avatar)
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-
     // 登出
     Logout ({ commit}) {
       return new Promise((resolve,reject) => {
@@ -100,9 +53,38 @@ const user = {
           }
         })
       })
-    }
+    },
+    // 获取个人信息
+    async getUserInfo({commit}){
+      let {data} = await reqUserInfo()
+       utils.detailBackCode(data,{},(payload)=>{
+        commit(GET_USER_INFO,payload)
+      })
+    },
 
-  }
+  },
+  mutations: {
+    SET_TOKEN: (state, token) => {
+      state.token = token
+    },
+    SET_NAME: (state, { name, welcome }) => {
+      state.name = name
+      state.welcome = welcome
+    },
+    SET_AVATAR: (state, avatar) => {
+      state.avatar = avatar
+    },
+    SET_ROLES: (state, roles) => {
+      state.roles = roles
+    },
+    SET_INFO: (state, info) => {
+      state.info = info
+    },
+    [GET_USER_INFO](state,payload){
+      state.userInfo = payload
+    }
+  },
+
 }
 
 export default user

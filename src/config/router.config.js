@@ -368,7 +368,7 @@ export const asyncRouterMap = [
       {
         path: '/account/info',
         name: 'accountinfo',
-        component: RouteView,
+        component: ()=>import('myPages/account/info/info.vue'),
         meta: { title: '个人信息', keepAlive: true, icon: 'user' },
       },
       // {

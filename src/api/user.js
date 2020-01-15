@@ -10,21 +10,18 @@ export const reqUserInfo=()=>axios({
 export const reqModiUserInfo = (data)=>axios({
   url:'user/info',
   data,
-  type:'PUT',
-  flag:false
+  method:'put'
 })
 
 // 更换密码
 export const reqChangePassword = (data)=>axios({
   url:'user/password/change',
   data,
-  type:'PUT',
-  flag:false
+  method:'put'
 })
 // 更换手机号
 export const reqChangePhone = (data)=>axios({
   url:'user/updatephone',
   data,
-  type:'POST',
-  flag:false
+  method:'post'
 })

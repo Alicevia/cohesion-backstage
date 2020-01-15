@@ -7,7 +7,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/'
 import { VueAxios } from './utils/request'
-
+import { ACCESS_TOKEN } from '@/store/mutation-types'
 // mock
 // WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
 // import './mock'
@@ -24,6 +24,7 @@ Vue.config.productionTip = false
 Vue.use(VueAxios)
 
 store.state.projectId = Vue.ls.get('projectId')
+store.state.user.token = Vue.ls.get(ACCESS_TOKEN)
 
 new Vue({
   router,
