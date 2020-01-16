@@ -20,9 +20,9 @@
       <template slot="action" slot-scope="record,item,index">
         <slot name="action" :record='record' ></slot>
       </template>
-      <!-- <template slot="role" slot-scope="record">
-        <slot name="role" :record='record'></slot>
-      </template> -->
+      <template slot="remarks" slot-scope="record">
+        <slot name="remarks" :record='record'></slot>
+      </template>
     </a-table>
   </div>
 </template>
@@ -49,11 +49,11 @@ export default {
 .table-header{
   background-color: #fff;
   /deep/ .ant-table-tbody > tr > td {
-    padding: 9px 16px;
+    padding: 7px 16px;
   }
   /deep/ .ant-table-thead th {
     background-color:#C2C8D2;
-    padding:12px;
+    padding:11px;
   }
   /deep/.ant-table-tbody > tr:hover > td{
     background-color:#F6F6F6

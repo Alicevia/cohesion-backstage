@@ -47,6 +47,7 @@
       :title="title"
       :page="page"
       @clearProject="clearProject"
+      @searchProject='searchProject'
       :project="project"
       ref="curdProject"
     ></CrudProjectDialog>
@@ -61,6 +62,7 @@ import CrudProjectDialog from './crudProjectDialog'
 import { mapActions, mapState } from 'vuex'
 import { reqProjectEquip, reqDeleteProjectEquip, reqSearchProjectEquip } from '@/api/project'
 import utils from '../../../../utils/myUtils'
+import { message } from 'ant-design-vue'
 
 export default {
   data() {
@@ -80,18 +82,18 @@ export default {
   },
   created() {},
   mounted() {
-    this.getProjectList({ page: 0, size: 16 })
+    this.getProjectList({ page: 0, size: 16,projectName:this.search })
   },
 
   methods: {
-    ...mapActions(['updateProjectId', 'getProjectList','getSearchProjectList']),
+    ...mapActions(['updateProjectId', 'getProjectList']),
     // ...mapActions({
 
     // }),
     //
     // 查询项目
     searchProject() {
-      this.getSearchProjectList({page:0,size:16,projectName:this.search})
+      this.getProjectList({page:this.page,size:16,projectName:this.search})
     },
     // 添加项目
     addProject() {
@@ -108,7 +110,7 @@ export default {
     async deleteProject(id) {
       let { data } = await reqDeleteProjectEquip({projectId:id})
       utils.detailBackCode(data, { s: '删除成功' })
-      this.getProjectList({ page: this.page, size: 16 })
+      this.getProjectList({ page: this.page, size: 16,projectName:this.search })
     },
 
     // 存储项目id
@@ -120,11 +122,7 @@ export default {
     changePage(page) {
       page--
       this.page = page
-      if (this.search.trim()) {
-        this.getProjectList({ page, size: 16 ,projectName:this.search})
-      }else{
-        this.getProjectList({ page, size: 16 })
-      }
+      this.getProjectList({ page, size: 16 ,projectName:this.search})
 
     },
     // 清空传递的project
@@ -135,7 +133,7 @@ export default {
   watch: {
     search(newValue, oldValue) {
       if (!newValue.trim()) {
-        this.getProjectList({ page: 0, size: 16 })
+        this.getProjectList({ page: 0, size: 16,projectName:this.search })
       }
       
     }
@@ -147,6 +145,8 @@ export default {
     CrudProjectDialog
   }
 }
+
+
 </script>
 <style lang='less' scoped>
 /deep/ .card {

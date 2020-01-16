@@ -15,7 +15,7 @@ import * as TYPES from './mutation-types'
 
 import monitor from './myModules/monitor'
 import project from './myModules/project'
-
+import manage from './myModules/manage'
 
 Vue.use(Vuex)
 
@@ -25,7 +25,7 @@ export default new Vuex.Store({
     user,
     permission,
 
-    monitor,project
+    monitor,project,manage
   },
   state: {
     projectId:''

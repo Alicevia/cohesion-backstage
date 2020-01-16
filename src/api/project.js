@@ -1,10 +1,10 @@
 import { axios } from '@/utils/request'
 
-// 获取首页项目列表
-export const reqProjectEquip = (data)=>axios({
-  url: 'equipment/project/projectPageList',
-  method: 'get',
-  params:data
+// 查询项目
+export const reqSearchProjectEquip = data=>axios({
+  url:'equipment/project/findProjectList',
+  params:data,
+  method:'get'
 })
 
 // 新增项目
@@ -27,9 +27,3 @@ export const reqDeleteProjectEquip = data=>axios({
   params:data
 })
 
-// 查询项目
-export const reqSearchProjectEquip = data=>axios({
-  url:'equipment/project/findProjectList',
-  params:data,
-  method:'get'
-})

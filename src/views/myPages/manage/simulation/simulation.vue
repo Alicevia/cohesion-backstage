@@ -51,7 +51,11 @@ export default {
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    handleChange(){
+      
+    }
+  },
 
   components: {
     PageView,

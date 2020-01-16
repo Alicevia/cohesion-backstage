@@ -109,8 +109,14 @@ let utils = function (params) {
         case -35:
           message.error(data.message)
           break;
+        case -3:
+          message.error(data.message + '，请使用未注册的手机号')
+          break;
+        case -8:
+          message.error(data.message)
+          break;
         default:
-          message.error(e)
+          message.error(data.message)
           break;
       }
     }

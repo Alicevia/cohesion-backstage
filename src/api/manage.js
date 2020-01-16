@@ -1,5 +1,67 @@
 import { axios } from '@/utils/request'
 
+// 获取所有设备分组
+export const reqGetEquipmentGroup = data=>axios({
+  url:'equipment/getEquipmentGroup',
+  method:'get',
+  params:data
+})
+
+//新增设备分组
+export const reqAddEquipmentGroup = data=>axios({
+  url:'equipment/addEquipmentGroup',
+  method:'post',
+  data
+})
+
+//删除设备分组
+export const reqDeleteEquipmentGroup = data=>axios({
+  url:'equipment/deleteEquipmentGroup',
+  method:'delete',
+  params:data
+})
+
+//修改设备分组
+export const reqModiEquipmentGroup = data=>axios({
+  url:'equipment/updateEquipmentGroup',
+  method:'put',
+  data
+})
+
+//获取所有设备
+export const reqGetAllEquipment = data=>axios({
+  url:'equipment/getAllEquipment',
+  method:'get',
+  params:data
+})
+
+//获取分组下的设备
+export const reqGetGroupEquipment = data=>axios({
+  url:'equipment/getGroupEquipment',
+  method:'get',
+  params:data
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const api = {
   user: '/user',
   role: '/role',

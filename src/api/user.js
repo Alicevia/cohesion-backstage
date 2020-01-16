@@ -25,3 +25,10 @@ export const reqChangePhone = (data)=>axios({
   data,
   method:'post'
 })
+
+// 获取手机注册的验证码用于微信绑定 //也用于手机号的更换验证
+export const reqWxBindPhoneCode=(data)=>axios({
+  url:'register/phoneVerification',
+  params:data,
+  method:'get',
+})

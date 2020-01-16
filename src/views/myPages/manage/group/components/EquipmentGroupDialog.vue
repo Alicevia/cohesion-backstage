@@ -12,24 +12,23 @@
     <a-form @submit="handleSubmit" :form="form">
       <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-input
-          v-decorator="['projectName', 
+          v-decorator="['groupName', 
           {
             rules:[{required: true, message: '请输入名称'}],
-            initialValue:project.name
+            initialValue:project.groupName
           }
         ]"
         />
       </a-form-item>
-      <a-form-item label="图标" :labelCol="labelCol" :wrapperCol="wrapperCol">
-        <PicUpload
-          @getUploadImg="getUploadImg"
-          v-decorator="['file',
-            { 
-              rules: [{ required: true,message: '请上传图片' }], 
-              initialValue:project.projectImg
-              }]"
-          :picture="picture"
-        ></PicUpload>
+        <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <a-textarea 
+          v-decorator="['remarks', 
+          {
+            rules:[{required: true, message: '请输入名称'}],
+            initialValue:project.remarks
+          }
+        ]"
+        />
       </a-form-item>
     </a-form>
   </a-modal>
@@ -37,8 +36,9 @@
 
 <script>
 import PicUpload from '@/components/MyComponents/PicUpload'
-import { reqAddProjectEquip, reqModiProjectEquip } from '@/api/project'
-import utils from '../../../../utils/myUtils'
+import { reqAddEquipmentGroup,reqModiEquipmentGroup } from '@/api/manage'
+import utils from '@/utils/myUtils'
+import { mapState } from 'vuex'
 export default {
   name: 'TaskForm',
   props: ['title', 'project', 'page'],
@@ -58,9 +58,10 @@ export default {
     }
   },
   computed: {
-    picture() {
-      return this.project.projectImg
-    }
+    ...mapState({
+      projectId:state=>state.projectId
+    }),
+  
   },
   methods: {
     showModal() {
@@ -75,29 +76,28 @@ export default {
       }
       validateFields((errors, values) => {
         if (!errors) {
-          let formdata = new FormData()
-          for (const key in values) {
-            if (!values.hasOwnProperty(key)) return
-            formdata.append([key], values[key])
-          }
           if (this.project.id) {
+
             //修改项目
-            formdata.append('projectId', this.project.id)
-            reqModiProjectEquip(formdata).then(({ data }) => {
-              utils.detailBackCode(data, { s: '修改项目成功' },()=>{
-                this.$emit('searchProject')
+            values.id=this.project.id
+            values.projectId=this.projectId
+
+            reqModiEquipmentGroup(values).then(({ data }) => {
+              utils.detailBackCode(data, { s: '修改项目分组成功' },()=>{
+                this.$emit('updateInfo')
               })
 
             })
           } else {
             //新增项目
-            reqAddProjectEquip(formdata).then(({ data }) => {
-              utils.detailBackCode(data, { s: '添加项目成功' },()=>{
-                this.$emit('searchProject')
+            values.projectId=this.projectId
+            reqAddEquipmentGroup(values).then(({ data }) => {
+              utils.detailBackCode(data, { s: '添加项目分组成功' },()=>{
+                this.$emit('updateInfo')
               })
             })
           }
-          this.$emit('clearProject')
+          this.$emit('clearInfo')
           this.showModal()
         }
       })

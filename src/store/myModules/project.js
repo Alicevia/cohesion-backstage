@@ -12,12 +12,6 @@ const project = {
   },
   actions:{
     async getProjectList({commit},payload){
-      let {data} =await reqProjectEquip(payload)
-      utils.detailBackCode(data,{},(payload)=>{
-        commit(TYPES.GET_PROJECT_LIST,payload)
-      })
-    },
-    async getSearchProjectList({commit},payload){
       let {data} =await reqSearchProjectEquip(payload)
       utils.detailBackCode(data,{},(payload)=>{
         if (payload.total===0) {
@@ -31,9 +25,9 @@ const project = {
   mutations:{
     [TYPES.GET_PROJECT_LIST](state,payload){
       let {projectList} = state
-      console.log(payload)
-      projectList.list = payload.list
-      projectList.total = payload.total
+      let {list=[],total=0} = payload
+      projectList.list = list
+      projectList.total = total
     }
   }
 }

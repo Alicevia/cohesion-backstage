@@ -24,3 +24,7 @@ export const GET_PROJECT_LIST = 'GET_PROJECT_LIST'
 
 // -----------------------user
 export const GET_USER_INFO = 'GET_USER_INFO'
+
+// ------------------------manage
+export const GET_EQUIPMENT_GROUP_LIST = 'GET_EQUIPMENT_LIST'
+export const GET_ALL_EQUIPMENT = 'GET_ALL_EQUIPMENT'
