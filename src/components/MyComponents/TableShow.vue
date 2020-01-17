@@ -14,11 +14,17 @@
       class="table-header"
       :bordered='true'
     >
-      <template slot="sort" slot-scope="record,item,index">
-        <span>{{index+1}}</span>
+      <template slot="alarm" slot-scope="record,item,index">
+        <slot name="alarm" :record='record' ></slot>
+      </template>
+      <template slot="status" slot-scope="record,item,index">
+        <slot name="status" :record='record' ></slot>
       </template>
       <template slot="action" slot-scope="record,item,index">
         <slot name="action" :record='record' ></slot>
+      </template>
+           <template slot="set" slot-scope="record,item,index">
+        <slot name="set" :record='record' ></slot>
       </template>
       <template slot="remarks" slot-scope="record">
         <slot name="remarks" :record='record'></slot>

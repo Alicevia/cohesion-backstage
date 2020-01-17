@@ -15,12 +15,14 @@ const project = {
     }
   },
   actions:{
+    // 获取分组
     async getEquipmentGroup({commit},payload){
       let {data} =await reqGetEquipmentGroup(payload)
       utils.detailBackCode(data,{},(payload)=>{
         commit(TYPES.GET_EQUIPMENT_GROUP_LIST,payload)
       })
     },
+    // 获取所有设备
     async getAllEquipment({commit},payload){
       let {data} =await reqGetAllEquipment(payload)
       utils.detailBackCode(data,{},(payload)=>{
@@ -30,6 +32,17 @@ const project = {
         commit(TYPES.GET_ALL_EQUIPMENT,payload)
       })
     },
+    // 获取分组下所有设备
+    async getGroupEquipment({commit},payload){
+      let {data} =await reqGetGroupEquipment(payload)
+      utils.detailBackCode(data,{},(payload)=>{
+        if (payload.total===0) {
+          message.warning('查询结果为空')
+        }
+        commit(TYPES.GET_ALL_EQUIPMENT,payload)
+      })
+    },
+
 
 
   },

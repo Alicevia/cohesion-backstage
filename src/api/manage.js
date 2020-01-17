@@ -28,19 +28,21 @@ export const reqModiEquipmentGroup = data=>axios({
   data
 })
 
-//获取所有设备
+//获取项目下所有设备
 export const reqGetAllEquipment = data=>axios({
   url:'equipment/getAllEquipment',
   method:'get',
   params:data
 })
 
-//获取分组下的设备
+//获取项目分组下的设备
 export const reqGetGroupEquipment = data=>axios({
   url:'equipment/getGroupEquipment',
   method:'get',
   params:data
 })
+
+
 
 
 

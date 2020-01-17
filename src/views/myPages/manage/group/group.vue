@@ -107,9 +107,9 @@ export default {
       this.title = '修改设备分组'
       this.$refs['egroup'].showModal()
     },
-    // 修改分组
+    // 删除分组
     deleteEquipmentGroup(id) {
-      reqDeleteEquipmentGroup({equipmentGroupId:id}).then(({data})=>{
+      reqDeleteEquipmentGroup({equipmentGroupId:id,projectId:this.projectId}).then(({data})=>{
         utils.detailBackCode(data,{s:'删除设备分组成功'},()=>{
           this.getEquipmentGroup({ projectId: this.projectId })
         })
