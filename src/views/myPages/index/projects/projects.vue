@@ -80,9 +80,11 @@ export default {
       projectList: state => state.project.projectList
     })
   },
-  created() {},
+  created() {
+  },
   mounted() {
     this.getProjectList({ page: 0, size: 16,projectName:this.search })
+    console.log(this.$store)
   },
 
   methods: {

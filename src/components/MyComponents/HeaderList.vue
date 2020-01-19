@@ -2,27 +2,26 @@
   <div class="header-list">
     <div class="header-left">
       <ul class="header-item" v-show="projectId">
-         <router-link tag="li" to="/monitor">
+        <router-link tag="li" to="/monitor">
           <span class="iconfont">&#xe60b;</span>
           <p>监控</p>
         </router-link>
-         <router-link tag="li" to="/manage">
+        <router-link tag="li" to="/manage">
           <span class="iconfont">&#xe780;</span>
           <p>管理</p>
         </router-link>
-         <router-link tag="li" to="/log">
+        <router-link tag="li" to="/log">
           <span class="iconfont">&#xe601;</span>
           <p>日志</p>
         </router-link>
-         <router-link tag="li" to="/report">
+        <router-link tag="li" to="/report">
           <span class="iconfont">&#xe623;</span>
           <p>报表</p>
         </router-link>
-         <router-link tag="li" to="/datum">
+        <router-link tag="li" to="/datum">
           <span class="iconfont">&#xe606;</span>
           <p>数据</p>
         </router-link>
-        
       </ul>
     </div>
     <div class="header-right">
@@ -32,8 +31,9 @@
           <p>首页</p>
         </router-link>
         <router-link tag="li" to="/account" @click.native="clearProjectId">
-         <span class="iconfont">&#xe643;</span>
-          <p>账户</p></router-link>
+          <span class="iconfont">&#xe643;</span>
+          <p>账户</p>
+        </router-link>
         <li @click="logout">
           <span class="iconfont">&#xe60c;</span>
           <p>退出</p>
@@ -45,7 +45,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-
+import Vue from 'vue'
 export default {
   data() {
     return {}
@@ -58,29 +58,30 @@ export default {
   mounted() {},
 
   methods: {
-    ...mapActions(['updateProjectId','Logout']),
-    clearProjectId(){
+    ...mapActions(['updateProjectId', 'Logout']),
+    clearProjectId() {
       // this.updateProjectId('')
     },
     // 处理退出
-    logout(){
-      this.Logout().then(()=>{
-        this.$notification.success({
-          message: '操作成功',
-          description: `您已经退出登录`
+    logout() {
+      this.Logout()
+        .then(() => {
+          this.$notification.success({
+            message: '操作成功',
+            description: `您已经退出登录`
+          })
+          // this.$router.replace({ path: '/user/login' })
+        
+          location.href=location.origin+location.pathname+'#/user/login'
         })
-        this.$router.replace({path:'/user/login'})
-        // location.href=location.origin+location.pathname
-
-      }).catch(()=>{
-        this.$notification.error({
-          message: '用户信息已过期',
-          description: `您已经退出登录`
+        .catch(() => {
+          this.$notification.error({
+            message: '用户信息已过期',
+            description: `您已经退出登录`
+          })
+          this.$router.replace({ path: '/user/login' })
         })
-         this.$router.replace({path:'/user/login'})
-      })
     }
-
   },
 
   components: {}
@@ -114,12 +115,12 @@ export default {
       justify-content: center;
       font-size: 16px;
       &.active {
-        background-color: #292E3A;
-        background-clip:content-box;
+        background-color: #292e3a;
+        background-clip: content-box;
       }
-      &:hover{
-        background-color: #292E3A;
-        background-clip:content-box;
+      &:hover {
+        background-color: #292e3a;
+        background-clip: content-box;
       }
       span {
         font-size: 28px;

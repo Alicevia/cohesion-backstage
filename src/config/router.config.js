@@ -333,15 +333,16 @@ import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/lay
 export const asyncRouterMap = [
   {
     path:'/',
-    redirect:'/index'
+    component:BlankLayout,
   },
   // 首页
+
   {
     path: '/index',
     name: 'index',
     component: BasicLayout,
     meta: { title: '首页' },
-    redirect: '/index/view',
+    redirect: '/index/project',
     children: [
       {
         path: '/index/view',
@@ -357,6 +358,7 @@ export const asyncRouterMap = [
       },
     ]
   },
+
   // 账户
   {
     path: '/account',

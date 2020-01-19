@@ -31,11 +31,13 @@
         />
       </a-form-item>
       <a-form-item label="所属类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-        <a-select defaultValue="lucy" style="width: 120px" @change="handleChange">
-          <a-select-option value="jack">Jack</a-select-option>
-          <a-select-option value="lucy">Lucy</a-select-option>
-          <a-select-option value="disabled" disabled>Disabled</a-select-option>
-          <a-select-option value="Yiminghe">yiminghe</a-select-option>
+        <a-select style="width: 180px;marginLeft:20px" placeholder="请选择分组" @change="handleChange">
+          <a-select-option value="all">查看所有分组设备</a-select-option>
+          <a-select-option
+            v-for="item in equipmentGroupList"
+            :value="item.id"
+            :key="item.id"
+          >{{item.groupName}}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="报警信息推送" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -97,7 +99,8 @@ export default {
   },
   computed: {
     ...mapState({
-      projectId: state => state.projectId
+      projectId: state => state.projectId,
+      equipmentGroupList: state => state.manage.equipmentGroup.list
     })
   },
   methods: {

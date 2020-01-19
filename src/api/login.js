@@ -32,6 +32,13 @@ export const reqWeChatLogin = (data)=>axios({
   method:'post',
   data
 })
+//初次绑定手机号
+export const reqBindPhone=(data)=>axios({
+  url:'register/bindphone',
+  data,
+  method:'post',
+})
+
 //申请验证码
 export const reqResetAuthCode=(data)=>axios({
   url:'register/phoneVerificationPwd',
@@ -50,6 +57,7 @@ export const reqResetPW=(data)=>axios({
   data,
   method:'put',
 })
+
 
 
 

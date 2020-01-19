@@ -8,7 +8,9 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 // 创建 axios 实例
 const service = axios.create({
   // baseURL: process.env.VUE_APP_API_BASE_URL, // api base_url
-  baseURL:'http://192.168.50.163:8081/',
+  // baseURL:'http://192.168.50.163:8081/',
+  baseURL:'http://192.168.50.144:8081/',
+
   // baseURL:'http://192.168.50.144:8888/monitor-pc-api/',
   // baseURL:'https://www.cluster-dt.com/pcwechat/',
   timeout: 10000 // 请求超时时间
@@ -53,17 +55,18 @@ service.interceptors.request.use(config => {
 
 // response interceptor
 service.interceptors.response.use((response) => {
+  console.log(response)
+
   let {data:{code}} = response
   if (code===401) {
     Vue.ls.remove(ACCESS_TOKEN)
-    store.commit(ACCESS_TOKEN,'')
+    store.commit('SET_TOKEN','')
     notification.error({
-      message: '用户信息过期',
+      message: '用户信息过期,暂无权限',
       description: '请重新登录'
     })
     let {origin,pathname} = location
     location.href = origin+pathname+'#/user/login'
-    return
   }
   return response
 }, err)

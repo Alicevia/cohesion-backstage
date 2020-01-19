@@ -1,54 +1,35 @@
 <template>
-  <a-locale-provider>
-    <div id="app">
-      <router-view />
-    </div>
-  </a-locale-provider>
+  <div id="app">
+    <router-view />
+  </div>
 </template>
 
 <script>
-import Vue from 'vue'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
+
 import { AppDeviceEnquire } from '@/utils/mixin'
-import qs from 'qs'
-import { reqWeChatLogin } from '@/api/login'
+
 import { mapState } from 'vuex'
 export default {
   mixins: [AppDeviceEnquire],
   data() {
-    return {
-      locale: zhCN
-    }
+    return {}
   },
   created() {
-    let {search} =location
-    if (search) {
-      this.handleWeChatLogin()
-    }
   },
   mounted() {
+    
   },
-  computed:{
+  computed: {
     ...mapState({
-      token:state=>state.user.token
+      token: state => state.user.token
     })
   },
   methods: {
-    async handleWeChatLogin() {
-      let search = location.search
-      let { accessToken, openid } = qs.parse(search, {
-        ignoreQueryPrefix: true
-      })
-      let { data, headers } = await reqWeChatLogin({ accessToken, openid })
-      if (data.succeed) {
-        let userToken = headers['user-token']
-        Vue.ls.set(ACCESS_TOKEN, userToken, 7 * 24 * 60 * 60 * 1000)
-        this.$store.commit('SET_TOKEN', userToken)
-        
-      }
-    },
     
+   
+  },
+  components: {
+   
   }
 }
 </script>

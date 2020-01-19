@@ -12,38 +12,47 @@
     <a-form @submit="handleSubmit" :form="form">
       <a-form-item label="设备名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-input
-          v-decorator="['groupName', 
+          v-decorator="['name', 
           {
-            rules:[{required: true, message: '请输入名称'}],
-            initialValue:project.groupName
+            rules:[{required: true, message: '请输入设备名称'}],
+            initialValue:project.name
           }
         ]"
         />
       </a-form-item>
       <a-form-item label="设备编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-input
-          v-decorator="['remarks', 
+          v-decorator="['imei', 
           {
             rules:[{required: true, message: '请输入名称'}],
-            initialValue:project.remarks
+            initialValue:project.imei
           }
         ]"
         />
       </a-form-item>
       <a-form-item label="所属类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-        <a-select defaultValue="lucy" style="width: 120px" @change="handleChange">
-          <a-select-option value="jack">Jack</a-select-option>
-          <a-select-option value="lucy">Lucy</a-select-option>
-          <a-select-option value="disabled" disabled>Disabled</a-select-option>
-          <a-select-option value="Yiminghe">yiminghe</a-select-option>
+        <a-select style="width: 180px" placeholder="请选择分组" @change="handleChange"
+            v-decorator="['type', 
+          {
+            rules:[{required: true, message: '请选择所属类型'}],
+            initialValue:project.type
+          }
+        ]"
+        >
+          <a-select-option value="all">查看所有分组设备</a-select-option>
+          <a-select-option
+            v-for="item in equipmentGroupList"
+            :value="item.id"
+            :key="item.id"
+          >{{item.groupName}}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item label="报警信息推送" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-switch
-          v-decorator="['remarks', 
+          v-decorator="['alarmInfo', 
           {
-            rules:[{required: true, message: '请输入名称'}],
-            initialValue:project.remarks
+            rules:[{required: true, message: '请输入设备编号'}],
+            initialValue:project.alarmInfo
           }
         ]"
           checkedChildren="开"
@@ -53,11 +62,12 @@
       </a-form-item>
       <a-form-item label="报表信息推送" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-checkbox-group
+          @change='selectReport'
           :options="options"
-          v-decorator="['remarks', 
+          v-decorator="['report', 
           {
-            rules:[{required: true, message: '请输入名称'}],
-            initialValue:project.remarks
+            rules:[{required: true, message: '请选择推送周期'}],
+            initialValue:project.report
           }
         ]"
         />
@@ -72,9 +82,9 @@ import { reqAddEquipmentGroup, reqModiEquipmentGroup } from '@/api/manage'
 import utils from '@/utils/myUtils'
 import { mapState } from 'vuex'
 const options = [
-  { label: '日报表', value: 'Apple' },
-  { label: '周报表', value: 'Pear' },
-  { label: '月报表', value: 'Orange' }
+  { label: '日报表', value: 'dailyReport' },
+  { label: '周报表', value: 'weeklyReport' },
+  { label: '月报表', value: 'monthlyReport' }
 ]
 export default {
   name: 'TaskForm',
@@ -90,19 +100,23 @@ export default {
         xs: { span: 24 },
         sm: { span: 13 }
       },
-
       visible: false,
       form: this.$form.createForm(this)
     }
   },
   computed: {
-    ...mapState({
-      projectId: state => state.projectId
+  ...mapState({
+      projectId: state => state.projectId,
+      equipmentGroupList: state => state.manage.equipmentGroup.list
     })
   },
   methods: {
     showModal() {
       this.visible = !this.visible
+    },
+    // 报表选择
+    selectReport(value){
+      console.log(value)
     },
     handleChange() {},
     onChange(checkedValues) {
@@ -113,11 +127,11 @@ export default {
       const {
         form: { validateFields }
       } = this
-      if (this.img) {
-        this.form.setFieldsValue({ file: this.img })
-      }
+ 
       validateFields((errors, values) => {
         if (!errors) {
+          console.log(values)
+          return
           if (this.project.id) {
             //修改项目
             values.id = this.project.id
@@ -142,10 +156,7 @@ export default {
         }
       })
     },
-    // 图片回显
-    getUploadImg(img) {
-      this.img = img
-    }
+
   },
   components: {
     PicUpload

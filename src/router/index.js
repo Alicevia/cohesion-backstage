@@ -24,23 +24,22 @@ let router = new Router({
   // routes: constantRouterMap//先传入的是基本路由 后期通过addRoutes添加新路由
 })
 
-router.beforeEach((to, from, next) => {
-  let token = store.state.user.token
-  if (to.matched[0].path.includes('/user')) {
-    next()
-  } else {
-    if (token) {
-      next()
-    } else {
-      notification.error({
-        message: '您还未登录',
-        description: '请登录'
-      })
-      next({ path: '/user' })
-    }
-  }
-
-})
+// router.beforeEach((to, from, next) => {
+//   let token = store.state.user.token
+//   if (to.matched[0].path.includes('/user')) {
+//     next()
+//   } else {
+//     if (token) {
+//       next()
+//     } else {
+//       notification.error({
+//         message: '您还未登录',
+//         description: '请登录'
+//       })
+//       next({ path: '/user' })
+//     }
+//   }
+// })
 
 
 export default router
