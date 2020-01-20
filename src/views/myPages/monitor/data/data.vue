@@ -20,10 +20,13 @@
         <a-pagination :defaultCurrent="1" :total="500" />
       </template>
     </PageView>
-    <TableShow :columns='columns' :tableData='dataSource' :pagination='false'   v-if="showMethod==='table'">
-
-    </TableShow>
-    <CardList :dataSource='dataSource' v-else>
+    <TableShow
+      :columns="columns"
+      :tableData="dataSource"
+      :pagination="false"
+      v-if="showMethod==='table'"
+    ></TableShow>
+    <CardList :dataSource="dataSource" v-else>
       <a-list-item slot="renderItem" slot-scope="{item}">
         <template>
           <a-card :hoverable="true" :title="item.title" size="small" class="card">
@@ -64,7 +67,7 @@ let columns = [
   { align: 'center', title: '设备名称', dataIndex: 'name', key: 'name' },
   { align: 'center', title: '设备类型', dataIndex: 'type', key: 'type' },
   { align: 'center', title: '当前数值', dataIndex: 'value', key: 'value' },
-  { align: 'center', title: '所属分组', dataIndex: 'group', key: 'group' },
+  { align: 'center', title: '设备分组', dataIndex: 'group', key: 'group' },
   {
     align: 'center',
     title: '报警',
@@ -74,32 +77,31 @@ let columns = [
   {
     align: 'center',
     title: '设备编号',
-    dataIndex: 'number',
-    key: 'number'
+    dataIndex: 'imei',
+    key: 'imei'
   },
 
   {
     align: 'center',
     title: '刷新时间',
     key: 'time',
-    dataIndex:'time'
+    dataIndex: 'time'
     // scopedSlots: { customRender: 'action' }
   }
 ]
 let dataSource = []
 for (let i = 0; i < 16; i++) {
   dataSource.push({
-    id:i,
-    sort:i,
-    name:'张三'+i,
-    type:1,
-    value:i+10,
-    group:'分组',
-    warning:'否',
-    number:1000+i,
-    time:2019
+    id: i,
+    sort: i,
+    name: '张三' + i,
+    type: 1,
+    value: i + 10,
+    group: '分组',
+    warning: '否',
+    number: 1000 + i,
+    time: 2019
   })
-
 }
 
 export default {
@@ -122,7 +124,6 @@ export default {
   methods: {
     // 单选框
     onChange(e) {
-
       console.log('radio checked', e.target.value)
     },
     // 分组
@@ -149,7 +150,7 @@ export default {
     align-items: center;
     height: 100px;
 
-    .card-avatar{
+    .card-avatar {
       width: 70px;
       height: 70px;
     }

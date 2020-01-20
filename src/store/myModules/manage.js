@@ -1,5 +1,5 @@
 import * as TYPES from '../mutation-types'
-import {reqGetEquipmentGroup,reqGetAllEquipment} from '@/api/manage'
+import {reqGetEquipmentGroup,reqGetAllEquipment,reqGetGroupEquipment} from '@/api/manage'
 import utils from '@/utils/myUtils'
 import { message } from 'ant-design-vue'
 

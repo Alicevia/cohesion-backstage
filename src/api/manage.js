@@ -42,7 +42,33 @@ export const reqGetGroupEquipment = data=>axios({
   params:data
 })
 
+//新增设备
+export const reqAddEquipment = data=>{
+  let projectId = data.projectId
+  delete data.projectId
+  return axios({
+    url:`equipment/add?projectId=${projectId}`,
+    method:'post',
+    data
+  })
+}
+//删除设备
+export const reqDeleteEquipment = data=>axios({
+  url:'equipment/delete',
+  method:'delete',
+  params:data
+})
 
+// 修改设备
+export const reqModiEquipment = data=>{
+  let projectId = data.projectId
+  delete data.projectId
+  return axios({
+    url:`equipment/updateEquipment?projectId=${projectId}`,
+    method:'put',
+    data
+  })
+}
 
 
 

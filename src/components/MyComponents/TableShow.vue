@@ -14,6 +14,12 @@
       class="table-header"
       :bordered='true'
     >
+          <template slot="sort" slot-scope="record,item,index">
+        <span>{{index+1}}</span>
+      </template>
+      <template slot="modelImg" slot-scope="record,item,index">
+        <slot name="modelImg" :record='record' ></slot>
+      </template>
       <template slot="alarm" slot-scope="record,item,index">
         <slot name="alarm" :record='record' ></slot>
       </template>

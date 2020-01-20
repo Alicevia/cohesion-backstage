@@ -10,8 +10,9 @@
     :destroyOnClose="true"
   >
     <a-form @submit="handleSubmit" :form="form">
-      <a-form-item label="设备名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-        <a-input
+      <a-form-item v-if="project.name" label="设备名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <a-input 
+          :disabled='project.name?true:false'
           v-decorator="['name', 
           {
             rules:[{required: true, message: '请输入设备名称'}],
@@ -22,6 +23,7 @@
       </a-form-item>
       <a-form-item label="设备编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-input
+         :disabled='project.name?true:false'
           v-decorator="['imei', 
           {
             rules:[{required: true, message: '请输入名称'}],
@@ -30,16 +32,19 @@
         ]"
         />
       </a-form-item>
-      <a-form-item label="所属类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
-        <a-select style="width: 180px" placeholder="请选择分组" @change="handleChange"
-            v-decorator="['type', 
+
+      <a-form-item label="设备分组" :labelCol="labelCol" :wrapperCol="wrapperCol">
+        <a-select
+          style="width: 180px"
+          placeholder="请选择分组"
+          @change="handleChange"
+          v-decorator="['equipmentGroupId', 
           {
             rules:[{required: true, message: '请选择所属类型'}],
-            initialValue:project.type
+            initialValue:project.equipmentGroupId
           }
         ]"
         >
-          <a-select-option value="all">查看所有分组设备</a-select-option>
           <a-select-option
             v-for="item in equipmentGroupList"
             :value="item.id"
@@ -47,22 +52,20 @@
           >{{item.groupName}}</a-select-option>
         </a-select>
       </a-form-item>
+
       <a-form-item label="报警信息推送" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-switch
           v-decorator="['alarmInfo', 
           {
-            rules:[{required: true, message: '请输入设备编号'}],
-            initialValue:project.alarmInfo
+            rules:[{required: false, message: '请输入设备编号'}],
+            initialValue:project.alarmInfo?true:false
           }
         ]"
-          checkedChildren="开"
-          unCheckedChildren="关"
-          defaultChecked
         />
       </a-form-item>
       <a-form-item label="报表信息推送" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-checkbox-group
-          @change='selectReport'
+          @change="selectReport"
           :options="options"
           v-decorator="['report', 
           {
@@ -78,7 +81,7 @@
 
 <script>
 import PicUpload from '@/components/MyComponents/PicUpload'
-import { reqAddEquipmentGroup, reqModiEquipmentGroup } from '@/api/manage'
+import { reqAddEquipment,reqModiEquipment } from '@/api/manage'
 import utils from '@/utils/myUtils'
 import { mapState } from 'vuex'
 const options = [
@@ -105,7 +108,7 @@ export default {
     }
   },
   computed: {
-  ...mapState({
+    ...mapState({
       projectId: state => state.projectId,
       equipmentGroupList: state => state.manage.equipmentGroup.list
     })
@@ -115,7 +118,7 @@ export default {
       this.visible = !this.visible
     },
     // 报表选择
-    selectReport(value){
+    selectReport(value) {
       console.log(value)
     },
     handleChange() {},
@@ -127,17 +130,20 @@ export default {
       const {
         form: { validateFields }
       } = this
- 
+
       validateFields((errors, values) => {
         if (!errors) {
-          console.log(values)
-          return
+          values.report.forEach(item => {
+            values[item] = true
+          })
+          delete values.report
+          
           if (this.project.id) {
             //修改项目
             values.id = this.project.id
             values.projectId = this.projectId
-
-            reqModiEquipmentGroup(values).then(({ data }) => {
+            return
+            reqAddEquipment(values).then(({ data }) => {
               utils.detailBackCode(data, { s: '修改项目分组成功' }, () => {
                 this.$emit('updateInfo')
               })
@@ -145,18 +151,17 @@ export default {
           } else {
             //新增项目
             values.projectId = this.projectId
-            reqAddEquipmentGroup(values).then(({ data }) => {
-              utils.detailBackCode(data, { s: '添加项目分组成功' }, () => {
+            reqAddEquipment(values).then(({ data }) => {
+              utils.detailBackCode(data, { s: '添加设备成功' }, () => {
                 this.$emit('updateInfo')
               })
             })
+            this.$emit('clearInfo',values.equipmentGroup)
+            this.showModal()
           }
-          this.$emit('clearInfo')
-          this.showModal()
         }
       })
-    },
-
+    }
   },
   components: {
     PicUpload
