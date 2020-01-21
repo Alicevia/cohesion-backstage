@@ -37,7 +37,7 @@
         <span>{{record.isRun?'正常':'故障'}}</span>
       </template>
       <template #set="{record}">
-        <a-button @click="deviceSet" type="link" size="small">设置</a-button>
+        <a-button @click="deviceSet(record)" type="link" size="small">设置</a-button>
       </template>
     </TableShow>
     <DeviceDialog
@@ -48,18 +48,30 @@
       :project="device"
       :title="title"
     ></DeviceDialog>
-    <DeviceSetDialog
+    <component :is='set'  
+      :page="page"
+      :project="device"
+      title="参数设置"></component>
+    <!-- <DeviceSetDialog
       ref="deviceset"
       @clearInfo="clearInfo"
       @updateInfo="updateInfo"
       :page="page"
       :project="device"
       title="参数设置"
-    ></DeviceSetDialog>
+    ></DeviceSetDialog> -->
   </div>
 </template>
 
 <script>
+import TableShow from '@/components/MyComponents/TableShow'
+import PageView from '@/layouts/PageView'
+import { mapActions, mapState } from 'vuex'
+import DeviceDialog from './components/DeviceDialog'
+import WaterDeviceSetDialog from './components/WaterDeviceSetDialog'
+import { reqDeleteEquipment } from '@/api/manage'
+import utils from '../../../../utils/myUtils'
+
 let columns = [
   {
     align: 'center',
@@ -111,14 +123,6 @@ let columns = [
     scopedSlots: { customRender: 'action' }
   }
 ]
-
-import TableShow from '@/components/MyComponents/TableShow'
-import PageView from '@/layouts/PageView'
-import { mapActions, mapState } from 'vuex'
-import DeviceDialog from './components/DeviceDialog'
-import DeviceSetDialog from './components/DeviceSetDialog'
-import { reqDeleteEquipment } from '@/api/manage'
-import utils from '../../../../utils/myUtils'
 export default {
   data() {
     return {
@@ -128,7 +132,8 @@ export default {
       size: 16,
       title: '新增设备',
       device: {},
-      type: 'all'
+      type: 'all',
+      set:'WaterDeviceSetDialog'
     }
   },
 
@@ -139,6 +144,7 @@ export default {
       equipmentGroupList: state => state.manage.equipmentGroup.list //分组列表
     })
   },
+
   created() {},
   mounted() {
     this.getAllEquipment({ page: 0, size: 16, projectId: this.projectId })
@@ -163,8 +169,11 @@ export default {
       }
     },
     // 设置各种类型设备
-    deviceSet() {
-      this.$refs['deviceset'].showModal()
+    deviceSet(item) {       
+      if(true){
+        this.set = 'DeviceSetDialog'
+        // this.$refs['deviceset'].showModal()
+      }         
     },
     // 新增项目
     addEquipment() {
@@ -174,6 +183,7 @@ export default {
     },
     // 修改设备
     modiEquipment(item) {
+      console.log(item)
       this.device = item
       this.title = '修改设备'
       this.$refs['device'].showModal()
@@ -187,20 +197,23 @@ export default {
         })
       })
     },
+    // 设备编辑后更新数据
     updateInfo(type) {
       this.type = type
       this.updateEquipmentList(type)
     },
+    // 设备编辑后清除
     clearInfo() {
       this.device = {}
-    }
+    },
+
   },
 
   components: {
     TableShow,
     PageView,
     DeviceDialog,
-    DeviceSetDialog
+    WaterDeviceSetDialog
   }
 }
 </script>

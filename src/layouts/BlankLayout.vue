@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     ...mapActions(['getUserInfo']),
+    
     async handleWeChatLogin() {
       let search = location.search
       let { accessToken, openid } = qs.parse(search, {

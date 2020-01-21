@@ -11,8 +11,8 @@
   >
     <a-form @submit="handleSubmit" :form="form">
       <a-form-item v-if="project.name" label="设备名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-        <a-input 
-          :disabled='project.name?true:false'
+        <a-input
+          :disabled="project.name?true:false"
           v-decorator="['name', 
           {
             rules:[{required: true, message: '请输入设备名称'}],
@@ -23,7 +23,7 @@
       </a-form-item>
       <a-form-item label="设备编号" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-input
-         :disabled='project.name?true:false'
+          :disabled="project.name?true:false"
           v-decorator="['imei', 
           {
             rules:[{required: true, message: '请输入名称'}],
@@ -53,24 +53,27 @@
         </a-select>
       </a-form-item>
 
-      <a-form-item label="报警信息推送" :labelCol="labelCol" :wrapperCol="wrapperCol">
+      <a-form-item v-if="project.name" label="报警信息推送" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-switch
-          v-decorator="['alarmInfo', 
+        v-decorator="['alarmInfo', 
           {
-            rules:[{required: false, message: '请输入设备编号'}],
-            initialValue:project.alarmInfo?true:false
+            rules:[{required: false, message: '请选择推送周期'}],
+            
           }
         ]"
+          :defaultChecked='project.alarmInfo'
+          checkedChildren="开"
+          unCheckedChildren="关"
         />
       </a-form-item>
-      <a-form-item label="报表信息推送" :labelCol="labelCol" :wrapperCol="wrapperCol">
+      <a-form-item v-if="project.name" label="报表信息推送" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-checkbox-group
           @change="selectReport"
           :options="options"
           v-decorator="['report', 
           {
             rules:[{required: true, message: '请选择推送周期'}],
-            initialValue:project.report
+            initialValue:reportPush
           }
         ]"
         />
@@ -81,7 +84,7 @@
 
 <script>
 import PicUpload from '@/components/MyComponents/PicUpload'
-import { reqAddEquipment,reqModiEquipment } from '@/api/manage'
+import { reqAddEquipment, reqModiEquipment } from '@/api/manage'
 import utils from '@/utils/myUtils'
 import { mapState } from 'vuex'
 const options = [
@@ -111,7 +114,14 @@ export default {
     ...mapState({
       projectId: state => state.projectId,
       equipmentGroupList: state => state.manage.equipmentGroup.list
-    })
+    }),
+    reportPush() {
+      let temp = []
+      this.options.forEach(item => {
+        this.project[item.value] ? temp.push(item.value) : null
+      })
+      return temp
+    }
   },
   methods: {
     showModal() {
@@ -122,6 +132,7 @@ export default {
       console.log(value)
     },
     handleChange() {},
+    // 报表信息推送
     onChange(checkedValues) {
       console.log('checked = ', checkedValues)
       console.log('value = ', this.value)
@@ -130,24 +141,24 @@ export default {
       const {
         form: { validateFields }
       } = this
-
       validateFields((errors, values) => {
         if (!errors) {
+          if (this.project.id) {
+            //修改项目
           values.report.forEach(item => {
             values[item] = true
           })
+          console.log(values)
           delete values.report
-          
-          if (this.project.id) {
-            //修改项目
             values.id = this.project.id
             values.projectId = this.projectId
-            return
-            reqAddEquipment(values).then(({ data }) => {
+            reqModiEquipment(values).then(({ data }) => {
               utils.detailBackCode(data, { s: '修改项目分组成功' }, () => {
                 this.$emit('updateInfo')
               })
             })
+            this.$emit('clearInfo', values.equipmentGroup)
+            this.showModal()
           } else {
             //新增项目
             values.projectId = this.projectId
@@ -156,7 +167,7 @@ export default {
                 this.$emit('updateInfo')
               })
             })
-            this.$emit('clearInfo',values.equipmentGroup)
+            this.$emit('clearInfo', values.equipmentGroup)
             this.showModal()
           }
         }

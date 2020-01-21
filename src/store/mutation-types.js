@@ -28,3 +28,6 @@ export const GET_USER_INFO = 'GET_USER_INFO'
 // ------------------------manage
 export const GET_EQUIPMENT_GROUP_LIST = 'GET_EQUIPMENT_LIST'
 export const GET_ALL_EQUIPMENT = 'GET_ALL_EQUIPMENT'
+
+// ----------------------------monitor
+export const GET_MONITOR_EQUIPMENT_LIST = 'GET_MONITOR_EQUIPMENT_LIST'

@@ -8,8 +8,8 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 // 创建 axios 实例
 const service = axios.create({
   // baseURL: process.env.VUE_APP_API_BASE_URL, // api base_url
-  // baseURL:'http://192.168.50.163:8081/',
-  baseURL:'http://192.168.50.144:8081/',
+  baseURL:'http://192.168.50.163:8081/',//本地
+  // baseURL:'http://192.168.50.144:8081/',//线上测试
 
   // baseURL:'http://192.168.50.144:8888/monitor-pc-api/',
   // baseURL:'https://www.cluster-dt.com/pcwechat/',
