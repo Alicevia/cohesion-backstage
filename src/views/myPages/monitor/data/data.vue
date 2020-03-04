@@ -8,11 +8,9 @@
         </a-radio-group>
 
         <a-select style="width: 120px;marginLeft:50px" placeholder="请选择分组" @change="handleChange">
-          <a-select-option value="jack">Jack</a-select-option>
-          <a-select-option value="lucy">Lucy</a-select-option>
-          <a-select-option value="Yiminghe">yiminghe</a-select-option>
+          <a-select-option v-for="item in equipmentGroup.list" :key="item.id" :value="item.id">{{item.groupName}}</a-select-option>
         </a-select>
-        <a-input style="width:200px;margin:0 10px" placeholder="请输入项目名称" />
+        <a-input style="width:200px;margin:0 10px"  @change="onSearchChange"  v-model="searchDevice" placeholder="请输入设备名称" />
 
         <a-button type="primary" style="margin:0 10px 0 0">查询</a-button>
       </template>
@@ -22,19 +20,25 @@
     </PageView>
     <TableShow
       :columns="columns"
-      :tableData="dataSource"
+      :tableData="monitorEquipmentList.equipmentList||[]"
       :pagination="false"
       v-if="showMethod==='table'"
-    ></TableShow>
-    <CardList :dataSource="dataSource" v-else>
+    >
+    <template #status='{record}'>
+    <span >{{record.isRun?'正常':'故障'}}</span>
+
+    </template>
+    </TableShow>
+    <CardList :dataSource="monitorEquipmentList.equipmentList||[]" v-else>
       <a-list-item slot="renderItem" slot-scope="{item}">
         <template>
-          <a-card :hoverable="true" :title="item.title" size="small" class="card">
+          <a-card :hoverable="true" :title="item.name" size="small" class="card">
             <a-card-meta class="card-body" @click="goToProject(item.id)">
-              <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large" />
+              <a-avatar class="card-avatar" slot="avatar" :src="item.modelImg" size="large" />
               <div class="meta-content" slot="description">
-                <p>正常设备：{{item.normal}}</p>
-                <p>报警设备：{{item.unnormal}}</p>
+                <p>设备状态：{{item.isRun?'正常':'故障'}}</p>
+                <p>设备数值：{{item.strTemplate}}</p>
+                <p>所在分组：{{item.groupName}}</p>
               </div>
             </a-card-meta>
             <template class="ant-card-actions" slot="actions">
@@ -52,7 +56,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import CardList from 'views/list/CardList'
 import TableShow from '@/components/MyComponents/TableShow'
 import PageView from '@/layouts/PageView'
@@ -65,14 +69,21 @@ let columns = [
     width: 70
   },
   { align: 'center', title: '设备名称', dataIndex: 'name', key: 'name' },
-  { align: 'center', title: '设备类型', dataIndex: 'type', key: 'type' },
-  { align: 'center', title: '当前数值', dataIndex: 'value', key: 'value' },
-  { align: 'center', title: '设备分组', dataIndex: 'group', key: 'group' },
+  { align: 'center', title: '设备类型', dataIndex: 'modelType', key: 'modelType' },
+  { align: 'center', title: '当前数值', dataIndex: 'strTemplate', key: 'strTemplate' },
+  { align: 'center', title: '设备分组', dataIndex: 'groupName', key: 'groupName' },
   {
     align: 'center',
     title: '报警',
-    dataIndex: 'warning',
-    key: 'warning'
+    dataIndex: 'count',
+    key: 'count'
+  },
+    {
+    align: 'center',
+    title: '设备状态',
+    dataIndex: 'isRun',
+    key: 'isRun',
+    scopedSlots: { customRender: 'status' }
   },
   {
     align: 'center',
@@ -80,58 +91,72 @@ let columns = [
     dataIndex: 'imei',
     key: 'imei'
   },
+  
 
   {
     align: 'center',
     title: '刷新时间',
-    key: 'time',
-    dataIndex: 'time'
-    // scopedSlots: { customRender: 'action' }
+    key: 'date',
+    dataIndex: 'date'
+    
   }
 ]
-let dataSource = []
-for (let i = 0; i < 16; i++) {
-  dataSource.push({
-    id: i,
-    sort: i,
-    name: '张三' + i,
-    type: 1,
-    value: i + 10,
-    group: '分组',
-    warning: '否',
-    number: 1000 + i,
-    time: 2019
-  })
-}
+
 
 export default {
   data() {
     return {
       showMethod: 'data',
       columns,
-      dataSource
+      size:16,
+      page:0,
+      searchDevice:''
+
     }
   },
 
   computed: {
-    ...mapState(['projectId'])
+    ...mapState({
+      monitorEquipmentList: state => state.monitor.monitorEquipmentList,
+      projectId: state => state.projectId,
+      equipmentGroup:state=>state.manage.equipmentGroup
+    })
+  },
+  created(){
+      this.getMonitorEquipmentList({ projectId: this.projectId,size:this.size,page:this.page })
+      
   },
 
   mounted() {
-    // console.log(this.$route)
+    if (!this.equipmentGroup.total) {
+      this.getEquipmentGroup({projectId:this.projectId})
+    }
   },
 
   methods: {
+    ...mapActions(['getMonitorEquipmentList','getEquipmentGroup']),
     // 单选框
     onChange(e) {
       console.log('radio checked', e.target.value)
     },
+    // 搜索框
+    onSearchChange(e){
+      console.log(e.target.value)
+      if (e.target.value.trim()==='') {
+        this.page=0
+         this.getMonitorEquipmentList({ projectId: this.projectId,size:this.size,page:0})
+      }
+    },
     // 分组
     handleChange(value) {
-      console.log(`selected ${value}`)
+      this.page=0
+      this.getMonitorEquipmentList({ projectId: this.projectId,size:this.size,page:this.page,groupId:value })
+     
     }
   },
-
+  watch:{
+    
+  },
   components: {
     CardList,
     PageView,
@@ -151,16 +176,19 @@ export default {
     height: 100px;
 
     .card-avatar {
-      width: 70px;
-      height: 70px;
+      border-radius: 0;
+     
     }
     .meta-content {
+      height: 100%;
       margin: 0;
       p {
         padding: 0;
         margin: 0;
         margin-top: 8px;
         white-space: nowrap;
+        text-overflow: ellipsis;
+        
       }
     }
   }

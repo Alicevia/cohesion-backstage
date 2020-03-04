@@ -8,7 +8,8 @@ const monitor = {
   state:{
     monitorEquipmentList:{
       equipmentList:[],
-      totalPages:0
+      totalPages:0,
+      totalElements:0
     }
   },
   actions:{
@@ -21,10 +22,13 @@ const monitor = {
   },
   mutations:{
     [TYPES.GET_MONITOR_EQUIPMENT_LIST](state,payload){
+      console.log(payload)
       let {monitorEquipmentList} = state
-      let {equipmentList=[],totalElements} = payload
+      let {equipmentList=[],totalElements,totalPages} = payload
       monitorEquipmentList.equipmentList =equipmentList
       monitorEquipmentList.totalElements = totalElements
+      monitorEquipmentList.totalPages = totalPages
+
     }
   }
 }

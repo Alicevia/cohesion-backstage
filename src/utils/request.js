@@ -55,7 +55,6 @@ service.interceptors.request.use(config => {
 
 // response interceptor
 service.interceptors.response.use((response) => {
-  console.log(response)
 
   let {data:{code}} = response
   if (code===401) {

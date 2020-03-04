@@ -37,7 +37,6 @@ export default new Vuex.Store({
   },
   actions: {
     updateProjectId({commit},id){
-      console.log(id)
       Vue.ls.set('projectId',id)
       commit(TYPES.UPDATE_PROJECT_ID,id)
     }

@@ -8,7 +8,12 @@
         <a-button type="primary" @click="addProject">新增项目</a-button>
       </template>
       <template slot="extra">
-        <a-pagination :defaultCurrent="1" :defaultPageSize='size' @change="changePage" :total="projectList.total" />
+        <a-pagination
+          :defaultCurrent="1"
+          :defaultPageSize="size"
+          @change="changePage"
+          :total="projectList.total"
+        />
       </template>
     </PageView>
     <CardList :dataSource="projectList.list">
@@ -47,7 +52,7 @@
       :title="title"
       :page="page"
       @clearProject="clearProject"
-      @searchProject='searchProject'
+      @searchProject="searchProject"
       :project="project"
       ref="curdProject"
     ></CrudProjectDialog>
@@ -70,7 +75,7 @@ export default {
       title: '新增项目',
       project: {},
       page: 0,
-      size:16,
+      size: 16,
       search: ''
     }
   },
@@ -80,22 +85,20 @@ export default {
       projectList: state => state.project.projectList
     })
   },
-  created() {
-  },
+  created() {},
   mounted() {
-    this.getProjectList({ page: 0, size: 16,projectName:this.search })
-    console.log(this.$store)
+    this.getProjectList({ page: 0, size: 16, projectName: this.search })
   },
 
   methods: {
-    ...mapActions(['updateProjectId', 'getProjectList']),
+    ...mapActions(['updateProjectId', 'getProjectList', 'getMonitorEquipmentList']),
     // ...mapActions({
 
     // }),
     //
     // 查询项目
     searchProject() {
-      this.getProjectList({page:this.page,size:16,projectName:this.search})
+      this.getProjectList({ page: this.page, size: 16, projectName: this.search })
     },
     // 添加项目
     addProject() {
@@ -110,22 +113,21 @@ export default {
     },
     // 删除项目
     async deleteProject(id) {
-      let { data } = await reqDeleteProjectEquip({projectId:id})
+      let { data } = await reqDeleteProjectEquip({ projectId: id })
       utils.detailBackCode(data, { s: '删除成功' })
-      this.getProjectList({ page: this.page, size: 16,projectName:this.search })
+      this.getProjectList({ page: this.page, size: 16, projectName: this.search })
     },
 
     // 存储项目id
     goToProject(id) {
       this.updateProjectId(id)
-      this.$router.push({ path: '/monitor/data' })
+        this.$router.push({ path: '/monitor/data' })
     },
     // 改变页码
     changePage(page) {
       page--
       this.page = page
-      this.getProjectList({ page, size: 16 ,projectName:this.search})
-
+      this.getProjectList({ page, size: 16, projectName: this.search })
     },
     // 清空传递的project
     clearProject() {
@@ -135,9 +137,8 @@ export default {
   watch: {
     search(newValue, oldValue) {
       if (!newValue.trim()) {
-        this.getProjectList({ page: 0, size: 16,projectName:this.search })
+        this.getProjectList({ page: 0, size: 16, projectName: this.search })
       }
-      
     }
   },
 
@@ -147,8 +148,6 @@ export default {
     CrudProjectDialog
   }
 }
-
-
 </script>
 <style lang='less' scoped>
 /deep/ .card {
