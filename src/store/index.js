@@ -16,6 +16,7 @@ import * as TYPES from './mutation-types'
 import monitor from './myModules/monitor'
 import project from './myModules/project'
 import manage from './myModules/manage'
+import log from './myModules/log'
 
 Vue.use(Vuex)
 
@@ -23,23 +24,30 @@ export default new Vuex.Store({
   modules: {
     app,
     user,
-    permission,
+    // permission,
 
-    monitor,project,manage
+    monitor, project, manage,log
   },
   state: {
-    projectId:''
+    projectId: ''
   },
   mutations: {
-    [TYPES.UPDATE_PROJECT_ID](state,payload){
+    [TYPES.UPDATE_PROJECT_ID](state, payload) {
       state.projectId = payload
     }
   },
   actions: {
-    updateProjectId({commit},id){
-      Vue.ls.set('projectId',id)
-      commit(TYPES.UPDATE_PROJECT_ID,id)
-    }
+    updateProjectId({ commit }, id) {
+      if (id) {
+        Vue.ls.set('projectId', id)
+      } else {
+        console.log('3')
+        Vue.ls.remove('projectId')
+      }
+     
+      commit(TYPES.UPDATE_PROJECT_ID, id)
+    },
+
   },
   getters
 })

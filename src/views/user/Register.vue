@@ -91,7 +91,7 @@
 
 <script>
 import { mixinDevice } from '@/utils/mixin.js'
-import { getSmsCaptcha } from '@/api/login'
+// import { getSmsCaptcha } from '@/api/login'
 
 const levelNames = {
   0: '低',

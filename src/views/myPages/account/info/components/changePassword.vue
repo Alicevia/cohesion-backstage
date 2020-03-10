@@ -65,7 +65,7 @@
   </div>
 </template>
 <script>
-import { reqModiPassword } from '@/api/user'
+import { reqChangePassword } from '@/api/user'
 import utils from "@/utils/myUtils";
 export default {
   data() {
@@ -94,7 +94,8 @@ export default {
             newpass: values.password,
             oldpass: values.oldpass
           }
-          let { data } = await reqModiPassword(payload)
+          console.log(values)
+          let { data } = await reqChangePassword(payload)
           utils.detailBackCode(data, { s: '修改密码成功' }, () => {
             this.visible = !this.visible
           })

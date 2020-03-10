@@ -99,7 +99,8 @@ export default {
   computed: {
     ...mapState({
       // 动态主路由 addRouters里面是动态生成的路由 通过发请求之类
-      mainMenu: state => state.permission.addRouters
+      mainMenu: state => state.permission.addRouters,
+      projectId:state=>state.projectId
     }),
     contentPaddingLeft() {
       if (!this.fixSidebar || this.isMobile()) {
@@ -117,6 +118,7 @@ export default {
     }
   },
   created() {
+    
     // console.log(asyncRouterMap)
     // console.log(this.$route)//当前路由
     let { path } = this.$route.matched[0]
@@ -151,9 +153,15 @@ export default {
         }, 16)
       })
     }
+    // 获取所有项目以及具体项目下的分组
+    this.getProjectList({ page: 0, size: 16, projectName: this.search||'' })
+    if (this.projectId) {
+      this.getEquipmentGroup({projectId:this.projectId})
+    }
   },
   methods: {
-    ...mapActions(['setSidebar']),
+    ...mapActions(['setSidebar','getProjectList','getEquipmentGroup']),
+
     toggle() {
       this.collapsed = !this.collapsed
       this.setSidebar(!this.collapsed)

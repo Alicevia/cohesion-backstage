@@ -24,6 +24,7 @@ const monitor = {
     [TYPES.GET_MONITOR_EQUIPMENT_LIST](state,payload){
       console.log(payload)
       let {monitorEquipmentList} = state
+      // monitorEquipmentList = {...monitorEquipmentList,...payload}
       let {equipmentList=[],totalElements,totalPages} = payload
       monitorEquipmentList.equipmentList =equipmentList
       monitorEquipmentList.totalElements = totalElements

@@ -7,15 +7,35 @@
           <a-radio value="table">列表</a-radio>
         </a-radio-group>
 
-        <a-select style="width: 120px;marginLeft:50px" placeholder="请选择分组" @change="handleChange">
-          <a-select-option v-for="item in equipmentGroup.list" :key="item.id" :value="item.id">{{item.groupName}}</a-select-option>
+        <a-select
+          style="width: 120px;marginLeft:50px"
+          v-model="groupName"
+          placeholder="请选择分组"
+          @change="handleChange"
+        >
+          <a-select-option value>所有分组</a-select-option>
+          <a-select-option
+            v-for="item in equipmentGroup.list"
+            :key="item.id"
+            :value="item.id"
+          >{{item.groupName}}</a-select-option>
         </a-select>
-        <a-input style="width:200px;margin:0 10px"  @change="onSearchChange"  v-model="searchDevice" placeholder="请输入设备名称" />
+        <a-input
+          style="width:200px;margin:0 10px"
+          @change="onSearchChange"
+          v-model="searchDevice"
+          placeholder="请输入设备名称"
+        />
 
         <a-button type="primary" style="margin:0 10px 0 0">查询</a-button>
       </template>
       <template slot="extra">
-        <a-pagination :defaultCurrent="1" :total="500" />
+        <a-pagination
+          @change="handleChangePage"
+          :total="monitorEquipmentList.totalElements"
+          :current="page+1"
+          :defaultPageSize="16"
+        />
       </template>
     </PageView>
     <TableShow
@@ -24,16 +44,15 @@
       :pagination="false"
       v-if="showMethod==='table'"
     >
-    <template #status='{record}'>
-    <span >{{record.isRun?'正常':'故障'}}</span>
-
-    </template>
+      <template #status="{record}">
+        <span>{{record.isRun?'正常':'故障'}}</span>
+      </template>
     </TableShow>
     <CardList :dataSource="monitorEquipmentList.equipmentList||[]" v-else>
       <a-list-item slot="renderItem" slot-scope="{item}">
         <template>
           <a-card :hoverable="true" :title="item.name" size="small" class="card">
-            <a-card-meta class="card-body" @click="goToProject(item.id)">
+            <a-card-meta class="card-body">
               <a-avatar class="card-avatar" slot="avatar" :src="item.modelImg" size="large" />
               <div class="meta-content" slot="description">
                 <p>设备状态：{{item.isRun?'正常':'故障'}}</p>
@@ -45,9 +64,9 @@
               <!-- <a>操作一</a>
               <a>操作二</a>-->
             </template>
-            <span slot="extra" style="fontSize:18px" class="extra iconfont">&#xe710;</span>
+            <!-- <span slot="extra" style="fontSize:18px" class="extra iconfont">&#xe710;</span>
             <span slot="extra" style="fontSize:17px;margin:0 5px" class="extra iconfont">&#xe64c;</span>
-            <span slot="extra" style="fontSize:15px" class="extra iconfont">&#xe62f;</span>
+            <span slot="extra" style="fontSize:15px" class="extra iconfont">&#xe62f;</span>-->
           </a-card>
         </template>
       </a-list-item>
@@ -78,7 +97,7 @@ let columns = [
     dataIndex: 'count',
     key: 'count'
   },
-    {
+  {
     align: 'center',
     title: '设备状态',
     dataIndex: 'isRun',
@@ -91,27 +110,25 @@ let columns = [
     dataIndex: 'imei',
     key: 'imei'
   },
-  
 
   {
     align: 'center',
     title: '刷新时间',
     key: 'date',
     dataIndex: 'date'
-    
   }
 ]
-
 
 export default {
   data() {
     return {
       showMethod: 'data',
       columns,
-      size:16,
-      page:0,
-      searchDevice:''
-
+      size: 16,
+      page: 0,
+      searchDevice: '',
+      groupName: '请选择分组',
+      groupId: ''
     }
   },
 
@@ -119,44 +136,54 @@ export default {
     ...mapState({
       monitorEquipmentList: state => state.monitor.monitorEquipmentList,
       projectId: state => state.projectId,
-      equipmentGroup:state=>state.manage.equipmentGroup
+      equipmentGroup: state => state.manage.equipmentGroup
     })
   },
-  created(){
-      this.getMonitorEquipmentList({ projectId: this.projectId,size:this.size,page:this.page })
-      
+  created() {
+    this.getMonitorEquipmentList({ projectId: this.projectId, size: this.size, page: this.page })
   },
 
   mounted() {
-    if (!this.equipmentGroup.total) {
-      this.getEquipmentGroup({projectId:this.projectId})
-    }
+    this.getEquipmentGroup({ projectId: this.projectId })
+  },
+  activated() {
+    this.getMonitorEquipmentList({ projectId: this.projectId, size: this.size, page: this.page })
+    this.getEquipmentGroup({ projectId: this.projectId })
   },
 
   methods: {
-    ...mapActions(['getMonitorEquipmentList','getEquipmentGroup']),
+    ...mapActions(['getMonitorEquipmentList', 'getEquipmentGroup']),
     // 单选框
     onChange(e) {
       console.log('radio checked', e.target.value)
     },
     // 搜索框
-    onSearchChange(e){
+    onSearchChange(e) {
       console.log(e.target.value)
-      if (e.target.value.trim()==='') {
-        this.page=0
-         this.getMonitorEquipmentList({ projectId: this.projectId,size:this.size,page:0})
+      if (e.target.value.trim() === '') {
+        this.page = 0
+        this.groupName = '请选择分组'
+        this.getMonitorEquipmentList({ projectId: this.projectId, size: this.size, page: 0 })
       }
     },
     // 分组
     handleChange(value) {
-      this.page=0
-      this.getMonitorEquipmentList({ projectId: this.projectId,size:this.size,page:this.page,groupId:value })
-     
+      this.page = 0
+      this.groupId = value
+      this.getMonitorEquipmentList({ projectId: this.projectId, size: this.size, page: this.page, groupId: value })
+    },
+    // 分页回调
+    handleChangePage(page) {
+      this.page = page - 1
+      this.getMonitorEquipmentList({
+        projectId: this.projectId,
+        size: this.size,
+        page: this.page,
+        groupId: this.groupId
+      })
     }
   },
-  watch:{
-    
-  },
+  watch: {},
   components: {
     CardList,
     PageView,
@@ -177,7 +204,6 @@ export default {
 
     .card-avatar {
       border-radius: 0;
-     
     }
     .meta-content {
       height: 100%;
@@ -188,7 +214,6 @@ export default {
         margin-top: 8px;
         white-space: nowrap;
         text-overflow: ellipsis;
-        
       }
     }
   }

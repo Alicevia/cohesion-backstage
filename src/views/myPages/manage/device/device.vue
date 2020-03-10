@@ -51,15 +51,8 @@
     <component :is='set'  
       :page="page"
       :project="device"
-      title="参数设置"></component>
-    <!-- <DeviceSetDialog
-      ref="deviceset"
-      @clearInfo="clearInfo"
-      @updateInfo="updateInfo"
-      :page="page"
-      :project="device"
-      title="参数设置"
-    ></DeviceSetDialog> -->
+      title="参数设置">
+      </component>
   </div>
 </template>
 
@@ -133,7 +126,7 @@ export default {
       title: '新增设备',
       device: {},
       type: 'all',
-      set:'WaterDeviceSetDialog'
+      set:''
     }
   },
 
@@ -170,10 +163,11 @@ export default {
     },
     // 设置各种类型设备
     deviceSet(item) {       
-      if(true){
-        this.set = 'DeviceSetDialog'
-        // this.$refs['deviceset'].showModal()
-      }         
+      if(1==2){
+        this.set = 'WaterDeviceSetDialog'
+      }else{
+      
+      }      
     },
     // 新增项目
     addEquipment() {

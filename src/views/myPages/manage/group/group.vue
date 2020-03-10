@@ -87,7 +87,7 @@ export default {
     })
   },
   created() {
-    this.getEquipmentGroup({ projectId: this.projectId })
+    // this.getEquipmentGroup({ projectId: this.projectId })
   },
   mounted() {},
   activated() {

@@ -3,6 +3,7 @@ import { login, logout } from '@/api/login'
 import { ACCESS_TOKEN,GET_USER_INFO } from '@/store/mutation-types'
 import {reqUserInfo} from '@/api/user'
 import utils from '@/utils/myUtils'
+
 const user = {
   state: {
     token: '',
@@ -51,6 +52,7 @@ const user = {
             commit('SET_TOKEN', '')
             reject()
           }
+          // router.replace({path:'/user/login'})
         })
       })
     },

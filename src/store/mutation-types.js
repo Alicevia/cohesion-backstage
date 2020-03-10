@@ -32,3 +32,6 @@ export const GET_ALL_EQUIPMENT = 'GET_ALL_EQUIPMENT'
 // ----------------------------monitor
 export const GET_MONITOR_EQUIPMENT_LIST = 'GET_MONITOR_EQUIPMENT_LIST'
 // export const GET_MONITOR_
+
+// ----------------------------log
+export const GET_LOG_INFO = 'GET_LOG_INFO'

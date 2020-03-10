@@ -26,15 +26,15 @@
     </div>
     <div class="header-right">
       <ul class="header-item">
-        <router-link tag="li" to="/index" @click.native="clearProjectId">
+        <router-link tag="li" to="/index">
           <span class="iconfont">&#xe600;</span>
           <p>首页</p>
         </router-link>
-        <router-link tag="li" to="/account" @click.native="clearProjectId">
+        <router-link tag="li" to="/account">
           <span class="iconfont">&#xe643;</span>
           <p>账户</p>
         </router-link>
-        <li @click="logout">
+        <li @click="logout" >
           <span class="iconfont">&#xe60c;</span>
           <p>退出</p>
         </li>
@@ -60,7 +60,7 @@ export default {
   methods: {
     ...mapActions(['updateProjectId', 'Logout']),
     clearProjectId() {
-      // this.updateProjectId('')
+      this.updateProjectId('')
     },
     // 处理退出
     logout() {
@@ -71,7 +71,7 @@ export default {
             description: `您已经退出登录`
           })
           // this.$router.replace({ path: '/user/login' })
-        
+          this.clearProjectId()
           location.href=location.origin+location.pathname+'#/user/login'
         })
         .catch(() => {
@@ -81,8 +81,19 @@ export default {
           })
           this.$router.replace({ path: '/user/login' })
         })
+    },
+    kk(){
+      let obj={a:0,b:88}
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          console.log(key)
+          
+        }
+      }
     }
+
   },
+  
 
   components: {}
 }

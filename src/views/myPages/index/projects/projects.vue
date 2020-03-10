@@ -87,7 +87,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.getProjectList({ page: 0, size: 16, projectName: this.search })
+    // this.getProjectList({ page: 0, size: 16, projectName: this.search })
   },
 
   methods: {
@@ -121,7 +121,7 @@ export default {
     // 存储项目id
     goToProject(id) {
       this.updateProjectId(id)
-        this.$router.push({ path: '/monitor/data' })
+      this.$router.push({ path: '/monitor/data' })
     },
     // 改变页码
     changePage(page) {

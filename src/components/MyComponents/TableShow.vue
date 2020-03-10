@@ -8,7 +8,7 @@
       :rowSelection="rowSelection"
       :columns="columns"
       :customRow="customRow"
-      rowKey="id"
+      :rowKey="rowKey?rowKey:'id'"
       :pagination="pagination"
       :dataSource="tableData"
       class="table-header"
@@ -40,7 +40,7 @@
 </template>
 <script>
 export default {
-  props: ["rowSelection", "columns", "tableData", "customRow",'pagination'],
+  props: ["rowSelection", "columns", "tableData", "customRow",'pagination','rowKey'],
   data() {
     return {};
   },

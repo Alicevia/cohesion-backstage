@@ -104,7 +104,8 @@ let utils = function (params) {
     } else {
       switch (code) {
         case -6:
-          message.error('手机号已经注册，请更换手机')
+          message.error(data.message)
+          callback&&callback([])  
           break;
         case -35:
           message.error(data.message)
@@ -114,6 +115,10 @@ let utils = function (params) {
           break;
         case -8:
           message.error(data.message)
+          break;
+        case -14:
+          message.error(data.message)
+          callback&&callback([])  
           break;
         default:
           message.error(data.message)
