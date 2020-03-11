@@ -467,6 +467,7 @@ export const asyncRouterMap = [
      
     ]
   },
+  // 报表
   {
     path: '/report',
     name: 'report',
@@ -477,12 +478,13 @@ export const asyncRouterMap = [
       {
         path:'/report/record',
         name: 'reportrecord',
-        component: RouteView,
+        component: ()=>import('myPages/report/record/record.vue'),
         meta: { title: '报表记录', keepAlive: true, icon: 'table'},
       },
      
     ]
   },
+  // 数据
   {
     path: '/datum',
     name: 'datum',
@@ -493,13 +495,13 @@ export const asyncRouterMap = [
       {
         path:'/datum/curve',
         name: 'datumcurve',
-        component: RouteView,
+        component: ()=>import('myPages/datum/curve/curve.vue'),
         meta: { title: '曲线图表', keepAlive: true, icon: 'line-chart'},
       },
       {
         path:'/datum/columnar',
         name: 'datumcolumnar',
-        component: RouteView,
+        component: ()=>import('myPages/datum/columnar/columnar.vue'),
         meta: { title: '柱状图表', keepAlive: true, icon: 'bar-chart'},
       },
      

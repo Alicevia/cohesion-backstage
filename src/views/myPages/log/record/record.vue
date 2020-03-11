@@ -6,7 +6,6 @@
         <span>分组查询：</span>
         <a-select v-model="group"  style="width: 120px;marginRight:20px" placeholder="请选择分组" @change="handleChange">
           <a-select-option v-for="item in equipmentGroup " :value="item.id" :key='item.id' >{{item.groupName}}</a-select-option>
-         
         </a-select>
         <span>设备名称查询：</span>
         <a-input-search v-model="search" placeholder="请输入设备名称" style="width:40%"  @search="searchDeviceLog">
@@ -114,7 +113,8 @@ export default {
     search:{
       handler:function(newValue,oldValue){
         if (!newValue) {
-          this.getLogInfo({ projectId: this.projectId })
+          this.getLogInfo({ projectId: this.projectId叫·的v 
+           })
         }
        
       } 
