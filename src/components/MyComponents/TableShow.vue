@@ -13,6 +13,7 @@
       :dataSource="tableData"
       class="table-header"
       :bordered='true'
+      :scroll='scroll'
     >
           <template slot="sort" slot-scope="record,item,index">
         <span>{{index+1}}</span>
@@ -40,7 +41,7 @@
 </template>
 <script>
 export default {
-  props: ["rowSelection", "columns", "tableData", "customRow",'pagination','rowKey'],
+  props: ["rowSelection", "columns", "tableData", "customRow",'pagination','rowKey','scroll'],
   data() {
     return {};
   },
@@ -58,6 +59,9 @@ export default {
 };
 </script>
 <style lang='less' scoped>
+.content-item{
+  margin-bottom: 10px;
+}
 .table-header{
   background-color: #fff;
   /deep/ .ant-table-tbody > tr > td {
