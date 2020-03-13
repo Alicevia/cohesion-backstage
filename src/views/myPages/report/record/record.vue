@@ -8,7 +8,6 @@
             <a-select-option value="jack">日</a-select-option>
             <a-select-option value="lucy">周</a-select-option>
             <a-select-option value="month">月</a-select-option>
-
           </a-select>
         </div>
       </template>
@@ -16,36 +15,28 @@
         <a-button type="primary">导出数据</a-button>
       </template>
     </PageView>
-    <a-checkbox style="marginBottom:10px" @change="onChange">传感器</a-checkbox>
-    <TableShow
-      :scroll="{y:200}"
-      rowKey="imei"
-      :columns="columns"
-      :tableData="dataSource"
-      :pagination="false"
-    ></TableShow>
-    <a-checkbox style="marginBottom:10px" @change="onChange">传感器</a-checkbox>
-    <TableShow
-      :scroll="{y:200}"
-      rowKey="imei"
-      :columns="columns"
-      :tableData="dataSource"
-      :pagination="false"
-    ></TableShow>
-        <a-checkbox style="marginBottom:10px" @change="onChange">传感器</a-checkbox>
-    <TableShow
-      :scroll="{y:200}"
-      rowKey="imei"
-      :columns="columns"
-      :tableData="dataSource"
-      :pagination="false"
-    ></TableShow>
+
+    <a-checkbox-group @change="onChange" style="width:100%">
+      <template v-for="(item,index) of plainOptions">
+        <a-checkbox style="marginBottom:10px" :value="item" :key="item">{{item}}</a-checkbox>
+        <TableShow
+          :key="index"
+          :scroll="{y:180}"
+          rowKey="imei"
+          :columns="columns"
+          :tableData="dataSource"
+          :pagination="false"
+        ></TableShow>
+      </template>
+    </a-checkbox-group>
   </div>
 </template>
 
 <script>
 import PageView from '@/layouts/PageView'
 import TableShow from '@/components/MyComponents/TableShow'
+const plainOptions = ['Apple', 'Pear', 'Orange']
+const defaultCheckedList = []
 let columns = [
   {
     align: 'center',
@@ -98,7 +89,9 @@ export default {
   data() {
     return {
       columns,
-      dataSource
+      dataSource,
+      checkedList: defaultCheckedList,
+      plainOptions
     }
   },
 
@@ -108,7 +101,9 @@ export default {
 
   methods: {
     handleChange() {},
-    onChange() {}
+    onChange(checkedList) {
+     console.log(checkedList)
+    }
   },
 
   components: {
