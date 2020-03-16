@@ -29,10 +29,10 @@
     </div>
     <div class="parameter">
       <a-radio-group name="radioGroup" :defaultValue="1">
-        <a-radio :value="1">A</a-radio>
-        <a-radio :value="2">B</a-radio>
-        <a-radio :value="3">C</a-radio>
-        <a-radio :value="4">D</a-radio>
+        <a-radio :value="1">温度</a-radio>
+        <a-radio :value="2">压力</a-radio>
+        <a-radio :value="3">温度</a-radio>
+        <a-radio :value="4">压力</a-radio>
       </a-radio-group>
     </div>
     <div class="sheet">4</div>
@@ -63,8 +63,10 @@ export default {
   display: flex;
   flex-direction: column;
   .parameter{
-    padding-top: 10px;
-    padding-left: 230px;
+    padding-top: 20px;
+    padding-left: 40px;
+    margin-bottom: 20px;
+
   }
 }
 </style>
