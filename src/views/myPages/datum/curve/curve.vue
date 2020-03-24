@@ -2,7 +2,9 @@
   <div>
     <PageView :title='false'>
     </PageView>
-    <Chart></Chart>
+
+    <Chart v-for="item in tableNumber" :key="item.id" :id='item.id'></Chart>    
+    <Button @click="increament">添加</Button>
   </div>
 </template>
 
@@ -12,6 +14,9 @@ import Chart from '../components/chart'
 export default {
   data () {
     return {
+      tableNumber:[
+        {id:'myChart'},
+      ]
     };
   },
 
@@ -19,7 +24,13 @@ export default {
 
   mounted(){},
 
-  methods: {},
+  methods: {
+    // 添加图表
+    increament(){
+      let length = this.tableNumber.length+1
+      this.tableNumber.push({id:`myChat${length}`})
+    }
+  },
 
   components: {
     PageView,Chart

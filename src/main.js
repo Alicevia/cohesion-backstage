@@ -15,8 +15,21 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 import bootstrap from './core/bootstrap'
 import './core/lazy_use'
 // import './permission' // permission control
-import './utils/filter' // global filter
+// import './utils/filter' // global filter
 import './components/global.less'
+// import echarts from 'echarts'
+
+// 引入基本模板
+let echarts = require('echarts/lib/echarts')
+// 引入线性图组件
+require('echarts/lib/chart/line')
+// 引入柱状图组件
+require('echarts/lib/chart/bar')
+// 引入提示框和title组件
+require('echarts/lib/component/tooltip')
+require('echarts/lib/component/title')
+Vue.prototype.$echarts = echarts
+
 
 Vue.config.productionTip = false
 

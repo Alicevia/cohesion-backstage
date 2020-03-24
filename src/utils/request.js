@@ -11,7 +11,6 @@ const service = axios.create({
   baseURL:'http://192.168.50.144:8081/',//本地
   // baseURL:'http://192.168.50.163:8081/',//本地
   // baseURL:'http://192.168.50.144:8081/',//线上测试
-
   // baseURL:'http://192.168.50.144:8888/monitor-pc-api/',
   // baseURL:'https://www.cluster-dt.com/pcwechat/',
   timeout: 10000 // 请求超时时间
