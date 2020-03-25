@@ -9,6 +9,10 @@ const project = {
       list:[],
       total:0
     },
+    groupAllEquipment:{
+      list:[],
+      total:0
+    },
     equipment:{
       list:[],
       total:0
@@ -32,7 +36,7 @@ const project = {
         commit(TYPES.GET_ALL_EQUIPMENT,payload)
       })
     },
-    // 获取分组下所有设备
+    // 获取分组一页的设备
     async getGroupEquipment({commit},payload){
       let {data} =await reqGetGroupEquipment(payload)
       utils.detailBackCode(data,{},(payload)=>{
@@ -42,7 +46,16 @@ const project = {
         commit(TYPES.GET_ALL_EQUIPMENT,payload)
       })
     },
-
+    // 获取某个分组内的所有设备
+    async getGroupAllEquipment({commit},payload){
+      let {data} =await reqGetGroupEquipment(payload)
+      utils.detailBackCode(data,{},(payload)=>{
+        if (payload.total===0) {
+          message.warning('该分组下无设备')
+        }
+        commit(TYPES.GET_GROUP_ALL_EQUIPMENT,payload)
+      })
+    },
 
 
   },
@@ -58,6 +71,12 @@ const project = {
       let {list=[],total=0} = payload
       equipment.list = list
       equipment.total = total
+    },
+    [TYPES.GET_GROUP_ALL_EQUIPMENT](state,payload){
+      let {groupAllEquipment} = state
+      let {list=[],total=0} = payload
+      groupAllEquipment.list = list
+      groupAllEquipment.total = total
     },
   }
 }
