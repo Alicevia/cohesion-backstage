@@ -17,6 +17,7 @@ import monitor from './myModules/monitor'
 import project from './myModules/project'
 import manage from './myModules/manage'
 import log from './myModules/log'
+import datum from './myModules/datum'
 
 Vue.use(Vuex)
 
@@ -26,7 +27,7 @@ export default new Vuex.Store({
     user,
     // permission,
 
-    monitor, project, manage,log
+    monitor, project, manage,log,datum
   },
   state: {
     projectId: ''

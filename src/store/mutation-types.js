@@ -35,3 +35,6 @@ export const GET_MONITOR_EQUIPMENT_LIST = 'GET_MONITOR_EQUIPMENT_LIST'
 
 // ----------------------------log
 export const GET_LOG_INFO = 'GET_LOG_INFO'
+
+// ------------------------------datum
+export const GET_PROJECT_DEVICE_LIVE_DATA = 'GET_PROJECT_DEVICE_LIVE_DATA'

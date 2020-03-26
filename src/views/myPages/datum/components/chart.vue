@@ -1,39 +1,47 @@
 <template>
-    <div class="chart">
-      <div class="title">{{title}}</div>
-      <div class="select">
-        <div style="float:left;marginLeft:40px">
-          <span>数据：</span>
-          <a-select defaultValue="lucy" style="width: 120px" @change="handleChange">
-            <a-select-option value="jack">实时</a-select-option>
-            <a-select-option value="lucy">日</a-select-option>
-            <a-select-option value="Yiminghe">周</a-select-option>
-            <a-select-option value="Yiminghe">月</a-select-option>
-          </a-select>
-          <span style="marginLeft:30px">分组：</span>
-          <a-select placeholder='请选择分组' style="width: 120px" @change="handleGroupChange">
-            <a-select-option v-for="item in equipmentGroupList" :key='item.id' :value="item.id">{{item.groupName}}</a-select-option>
-          </a-select>
-          <span style="marginLeft:30px">设备：</span>
-          <a-select defaultValue="lucy" style="width: 120px" @change="handleChange">
-            <a-select-option v-for="item in groupAllEquipment" :key="item.equipmentGroupId" :value="item.equipmentGroupId">{{item.name}}</a-select-option>
-            <a-select-option value="lucy">Lucy</a-select-option>
-            <a-select-option value="disabled" disabled>Disabled</a-select-option>
-            <a-select-option value="Yiminghe">yiminghe</a-select-option>
-          </a-select>
-        </div>
-        <a-button style="float:right" type="primary">导出数据</a-button>
+  <div class="chart">
+    <div class="title">{{title}}</div>
+    <div class="select">
+      <a-spin :spinning='spinning'>
+      <div style="float:left;marginLeft:40px">
+        <span>数据：</span>
+        <a-select defaultValue="lucy" style="width: 120px" @change="handleChange">
+          <a-select-option value="jack">实时</a-select-option>
+          <a-select-option value="lucy">日</a-select-option>
+          <a-select-option value="Yiminghe">周</a-select-option>
+          <a-select-option value="23">月</a-select-option>
+        </a-select>
+        <span style="marginLeft:30px">分组：</span>
+        <a-select placeholder="请选择分组" style="width: 120px" @change="handleGroupChange">
+          <a-select-option
+            v-for="item in equipmentGroupList"
+            :key="item.id"
+            :value="item.id"
+          >{{item.groupName}}</a-select-option>
+        </a-select>
+
+        <span style="marginLeft:30px">设备：</span>
+        <a-select v-model="equipment" style="width: 120px" @change="handleEquipmentChange">
+          <a-select-option
+            v-for="item in groupAllEquipment"
+            :key="item.id"
+            :value="item.id"
+          >{{item.name}}</a-select-option>
+        </a-select>
       </div>
-      <div class="parameter" style="paddingLeft:230px">
-        <a-radio-group name="radioGroup" :defaultValue="1">
-          <a-radio :value="1">温度</a-radio>
-          <a-radio :value="2">压力</a-radio>
-          <a-radio :value="3">温度</a-radio>
-          <a-radio :value="4">压力</a-radio>
-        </a-radio-group>
-      </div>
-      <div class="sheet" :id="id"></div>
+      <a-button style="float:right" type="primary">导出数据</a-button>
+      </a-spin>
     </div>
+    <div class="parameter" style="paddingLeft:230px">
+      <a-radio-group name="radioGroup" :defaultValue="1">
+        <a-radio :value="1">温度</a-radio>
+        <a-radio :value="2">压力</a-radio>
+        <a-radio :value="3">温度</a-radio>
+        <a-radio :value="4">压力</a-radio>
+      </a-radio-group>
+    </div>
+    <div class="sheet" :id="id"></div>
+  </div>
 </template>
 
 <script>
@@ -50,14 +58,15 @@ export default {
   },
   data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      equipment: null,
+      spinning:false
     }
   },
 
   computed: {
     ...mapState({
       equipmentGroupList: state => state.manage.equipmentGroup.list,
-      groupAllEquipment:state=>state.manage.groupAllEquipment.list
+      groupAllEquipment: state => state.manage.groupAllEquipment.list
     })
   },
 
@@ -66,13 +75,24 @@ export default {
   },
 
   methods: {
-    ...mapActions('getGroupAllEquipment'),
+    ...mapActions(['getGroupAllEquipment']),
     handleChange(value) {
       console.log(value)
     },
-    handleGroupChange(groupId){
-      let payload = {groupId,page:0,size:999}
-      this.getGroupAllEquipment(payload)
+    handleEquipmentChange(){
+
+    },
+    handleGroupChange(groupId) {
+      let payload = { groupId, page: 0, size: 999 }
+      this.spinning = true
+      this.getGroupAllEquipment(payload).then(() => {
+        this.spinning = false
+        if (this.groupAllEquipment.length !== 0) {
+          this.equipment = this.groupAllEquipment[0].id
+        }else{
+          this.equipment = ''
+        }
+      })
     },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
@@ -88,7 +108,7 @@ export default {
         },
         series: [
           {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            data: [820, 932, 901, 934, 1290, 1800, 1320],
             type: 'line',
             smooth: true
           }
@@ -115,7 +135,7 @@ export default {
     padding-left: 40px;
     margin-bottom: 20px;
   }
-  .sheet{
+  .sheet {
     position: relative;
     width: 100%;
     height: 400px;

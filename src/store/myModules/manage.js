@@ -54,6 +54,7 @@ const project = {
           message.warning('该分组下无设备')
         }
         commit(TYPES.GET_GROUP_ALL_EQUIPMENT,payload)
+        return Promise.resolve()
       })
     },
 
