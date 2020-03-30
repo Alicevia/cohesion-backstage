@@ -508,9 +508,9 @@ export const asyncRouterMap = [
     ]
   },
 
-  {
-    path: '*', redirect: '/404', hidden: true
-  }
+  // {
+  //   path: '*', redirect: '/404', hidden: true
+  // }
 ]
 
 /**
@@ -527,38 +527,38 @@ export const constantRouterMap = [
       {
         path: 'login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
+        component: () => import(/* webpackChunkName: "login" */ '@/views/user/Login')
       },
-      {
-        path: 'register',
-        name: 'register',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
-      },
-      {
-        path: 'register-result',
-        name: 'registerResult',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
-      },
-      {
-        path: 'recover',
-        name: 'recover',
-        component: undefined
-      }
+      // {
+      //   path: 'register',
+      //   name: 'register',
+      //   component: () => import(/* webpackChunkName: "register" */ '@/views/user/Register')
+      // },
+      // {
+      //   path: 'register-result',
+      //   name: 'registerResult',
+      //   component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+      // },
+      // {
+      //   path: 'recover',
+      //   name: 'recover',
+      //   component: undefined
+      // }
     ]
   },
 
-  {
-    path: '/test',
-    component: BlankLayout,
-    redirect: '/test/home',
-    children: [
-      {
-        path: 'home',
-        name: 'TestHome',
-        component: () => import('@/views/Home')
-      }
-    ]
-  },
+  // {
+  //   path: '/test',
+  //   component: BlankLayout,
+  //   redirect: '/test/home',
+  //   children: [
+  //     {
+  //       path: 'home',
+  //       name: 'TestHome',
+  //       component: () => import('@/views/Home')
+  //     }
+  //   ]
+  // },
 
   {
     path: '/404',

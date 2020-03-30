@@ -92,10 +92,7 @@ export default {
 
   methods: {
     ...mapActions(['updateProjectId', 'getProjectList', 'getMonitorEquipmentList']),
-    // ...mapActions({
 
-    // }),
-    //
     // 查询项目
     searchProject() {
       this.getProjectList({ page: this.page, size: 16, projectName: this.search })
