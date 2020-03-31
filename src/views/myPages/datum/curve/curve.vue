@@ -3,7 +3,7 @@
     <PageView :title='false'>
     </PageView>
 
-    <Chart v-for="(item) in tableNumber" :key="item.id" :id='item.id' :title='item.title'></Chart>    
+    <Chart v-for="(item) in tableNumber" :key="item.id" :id='item.id' type='line' :title='item.title'></Chart>    
     <a-button v-show="hideBtn" type="primary"  @click="increament">添加图表</a-button>
     
   </div>

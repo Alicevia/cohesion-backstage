@@ -157,11 +157,12 @@ export default {
     this.getProjectList({ page: 0, size: 16, projectName: this.search||'' })
     if (this.projectId) {
       this.getEquipmentGroup({projectId:this.projectId})
-      this.getProjectDeviceLiveData({projectId:this.projectId})
+      this.getProjectDeviceParameter({projectId:this.projectId})
+      
     }
   },
   methods: {
-    ...mapActions(['setSidebar','getProjectList','getEquipmentGroup','getProjectDeviceLiveData']),
+    ...mapActions(['setSidebar','getProjectList','getEquipmentGroup','getProjectDeviceParameter']),
 
     toggle() {
       this.collapsed = !this.collapsed
